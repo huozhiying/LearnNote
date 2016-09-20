@@ -1,2 +1,937 @@
 # LearnNote
 学习笔记
+
+1、开始和结束标签之间只要存在内容就会创建一个text类型的文本节点。
+2、为什么每个元素只有一个文本节点？
+3、为什么要分开文本节点字符串，
+4、Text类型提供的方法normalize()、splitText()(按照指定的位置分割nodevalue，原来的文本节点包含从开始到指定位置的内容，新节点包含从指定内容到结束的内容，ps：该方法还返回一个新文本节点，该节点与原节点的parentNode相同。)
+按照指定的位置是什么位置？
+
+5、div.classList.contains
+
+6、焦点管理：
+document.activeElement属性,该属性始终会引用当前获得焦点的的元素，（例子）
+
+》元素获得焦点的方式：页面加载、用户输入、调用focus（）
+
+ps:文档刚刚加载完document.activeElement保存的是document.body元素的引用，文档加载期间document.activeElement保存的是null.
+ps:作用：通过判断document.activeElement检测页面是否有交互在进行。
+
+7、HTMLDocument变化
+》readyState属性{loading：正在加载，complete：已经加载完文档。}
+》document.compatMode{标准模式下：document.compatMode = CSS1Compat，
+混杂模式下document.compatMode = BackCompat}
+>document.head属性
+
+8、字符集属性：
+》document.charset表示文档实际使用的字符集。可以使用《meta》标签的charset进行修改。
+》document.defaultcharset
+
+9、自定义数据属性，h5扩展非标准的属性以data-前缀开头提供与元素渲染无关的信息，使用元素dataset方法来访问自定义属性的值.
+例如：<div id=“myDiv” data-myName = “tom">
+var a =document.getElementByid(‘myDiv');
+取得：var a =div.dataset.name;
+设置：div.dataset.name = ‘huohuo';
+
+10、插入元素
+innerHTML：读模式下
+outerHTML:读模式下
+insertAdjacentHTML（插入位置，插入的html代码）
+          插入位置：beforebegin
+                            afterbegin
+                            beforeend
+                            beforeend
+ps:使用innerHTML相比多次操作DOM创建节点再指定之间的关系效率要高好多，是因为设置innerHTML，outerHTML的时候会创建一个html解析器
+ps：为什么会创建解析器？？
+
+11、为了解决如何滚动页面，h5扩展ScrolIntoView()方法
+》可在所有HTML上调用
+例如：document.form[0].ScrolIntoView();//让元素可见
+
+12、专有扩展
+》使用document.documentMode可以获取当前文档模式使用的是什么模式。
+
+第12章DOM扩展
+DOM2、DOM3级用来扩展DOM API
+DOM2只是基于1基础添加了属性和方法
+DOM3基于1基础添加了属性和方法(加强)，还添加了新的类型。
+var supportDOM2Core  = document.implementation.hasFeature("core","2.0”); // 返回的是布尔值
+
+1、什么是XML的命名空间
+2、DocumentType类型新增了3个属性 publicId、systemId、
+3、document类型有几种？
+
+Document类型中唯一与命名空间无关的方法是importNode(para1,para2)
+para1:需要被复制的节点
+para2:是否复制该节点的子节点
+
+DOM1级有hasFeature方法用来结案侧浏览器是否支持摸个文档模型
+=====
+Document类型的变化：
+=========================
+DOM2级核心  document新增方法：
+     document.importNode(oldNode, true);
+  document.defaultView
+  document.parentWindow;
+  document.implementation对象新增的两个方法：
+     （1）createDocumentType()接收三个参数：文档类型的名称、publicId、systemId（ps:该方法只在创建新文档的时候有用）
+     （2）createDocument()接收三针对文档中的 namespaceURI文档元素的标签名、新文档的文档类型。
+示例：document.importNode.createDocumentType(
+"html",
+" -//W3C//DTD XHTML 1.0 Strict//EN",
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+)
+document.importNode.createDocument(
+"http://www.w3.org/1999/xhtml”,
+"html",
+doctype
+) // Uncaught SyntaxError: Invalid or unexpected token
+
+DOM2级HTML模块
+document.implementation
+createHTMLDocument()创建一个完整的HTML文档，包括html和body等标签。
+
+Node类型的变化：
+=========================
+DOM2 唯一与命名空间无关的变化添加isSupported()方法，类似DOM1 引入放入 document.implementation的方法hasFeature()
+isSupported(特性号，特性版本号)用于确定当前节点具有什么能力，如果浏览器能够将给定的特性号的特性版本实现该函数返回true。（简单说就是检测某个特性是否能使用（能力检测））
+
+DOM3 引入isSameNode(para)和 isEqualNode(para)返回布尔值
+     相同：两个节点引用同一个对象
+     相等：两个节点是相同的类型，包括里面属性名和位置都相同。
+
+setUserData(要设置的键，实际数据（）数据类型不限，处理函数function)将数据指定给节点，处理          函数function(操作类型的数值，数据键，数据源，源节点，目标节点){
+     // 操作类型的数值有：1-》复制，2-》导入，3-》删除，4-》重命名
+     在函数内部可以自已定义如何存储数据。
+}
+getUserData("name")
+
+框架和内嵌框架
+HTMLFrameElement和HTMLIFrameElement，在DOM2级有一个新的属性contentDocument
+
+样式变化：
+style对象的属性和方法变化：
+任何style特性的html元素在js中都有一个对应的style属性，该style对象是CSSStyleDeclaration的实例，如果没有给元素设置style属性，在style对象中会有默认样式。
+（1）将在style中使用短划线的css样式在js中使用驼峰命名方式调用
+（2）使用cssText属性指定对个css键值属性。
+获取css属性的值：
+
+- getPropertyValue(css属性名) // 返回属性值
+- getPropertyCSSValue() // 返回cssValue对象,包含两个属性 cssText cssValueType(表示值的类型) 0：继承，1：基本值，2：值列表，3：自定义值
+- removeProperty（要移除的属性名）
+
+计算样式：
+示例：
+
+增强了document.defaultView（ps:在浏览器中该属性返回当前document所关联的window对象）
+
+- 添加 getComputedStyle(需要计算样式的元素，伪元素字符串)参数二可以使null，该方法返回 CSSStyleDeclaration对象，里面包含当前元素的所有要计算样式。
+
+- getComputedStyle返回的对象和element.style返回的对象是同一类型，都是CSSStyleDeclaration对象，
+- （1）不同的是getComputedStyle对象是只读的，
+- （2）element.style返回的对象是读、写模式
+- 找到的解释：
+
+- 验证：
+- getComputedStyle：
+
+- element.style:
+
+- 该属性没有设置过style属性，返回值就为空,很奇怪：
+
+打印发现不同：
+element.style只获取style属性设置过的样式，而getComputedStyle是获取所有最后会应用到元素上的样式。
+
+操作样式：
+document.implementation.hasFeature(特性, 特性版本号);返回的布尔值。
+
+样式-》偏移量：
+
+- offsetHeight 和offsetWidth:表示元素的content+padding+border的宽高。
+- offsetTop 和 offsetLeft ：表示元素外边框到父元素内边框的距离。
+
+
+     clientHeight和clientWidth：表示元素的content+padding。
+
+- scrollHeight 和scrollWidth：表示元素的content+padding+滚动条。
+- scrollTop 和 scrollLeft ：表示页面隐藏在内容区域上方和左边的像素数。
+
+getBoundingClientRect()返回一个对象，left，top，right，bottom,width,height，表示当前元素相对视口的位置和元素。
+
+遍历：
+NodeIterator和TreeWalker从根节点开始执行深度优先遍历。
+（1）NodeIterator:元素调用nextNode()遍历该元素的所有子元素，直到nextNode()返回null，使用previousNode()往回查找一个节点，
+（2）TreeWalker：可以各个方向进行遍历
+
+parentNode()
+firstChild()
+lastChild()
+nextSibling()
+previousSibling()
+
+5、js中DOM的那些坑：
+          https://segmentfault.com/a/1190000002650240
+
+6、移动端Touch事件：http://note.isongli.cn/blog/post/admin/%E7%A7%BB%E5%8A%A8%E7%AB%AFtouch%E4%BA%8B%E4%BB%B6.md
+
+Node类型：
+document类型：
+document是HTMLDocument的一个实例，
+
+element类型：
+特性：
+方法：
+属性：
+name。。。Map
+
+Text类型：
+
+第八章：BOM
+1、window对象：
+(1)全局作用域：
+global对象是js的全局对象，但在浏览器中，ECMAScript 规定window对象为global对象，浏览器制造商根据自己的浏览器特性，在window对象中添加了一些属性和方法来更好的支持js。
+
+浏览器中定义的所有属性和方法都属于window对象，在调用的时候，按照规定是使用window.方法(),也可以不适用window.,直接使用方法默认也是window对象调用的。
+示例：
+var age = 29;
+function sayAge(){
+    console.log(this.age);
+}
+age;//29
+window.age; //29
+sayAge(); //29
+window.sayAge(); //29
+
+ps:定义全局对象与在window对象上直接添加属性有区别：
+     全局对象不能通过delete操作符删除，该操作符只可以删除属性值。
+问题1：delete操作符为什么只能删除属性值？
+     window属性有一个configurable的特性，当该特性设置为false时，在window作用域中定义的属性和方法则不可删除，反之可以。
+问题2：如何查看window的特性configurable？
+
+技巧1:在多人开发的全局作用域中，可以在声明对象之前使用window.方法名，检验一下该方法是否存在，防止覆盖。如果方法未被定义会返回undefine。
+
+(2)窗口关系及框架：
+<frame>生成窗口，每一个窗口都有自己的window对象和name
+当页面有几个 frame时，都会保存在frames集合里，可以使用frames[索引值]或者frames[name]获取窗口。
+
+top（始终指向最高层的框架），parent、self
+
+ps：
+问题：最高层窗口是通过window.open()打开的
+
+(3)窗口的位置
+IE、Safari、Opera 、Chrome：
+screenLeft
+screenTop
+
+Firefox：
+screenX
+screenY
+
+screenX、screenY在chrome中也可以取到。
+
+Firefox、Safari、Chrome
+返回top.screenX和top.screenY
+
+将窗口移动到指定的位置
+moveTo(x，y)
+moveBy(水平，垂直)参数可为负
+ps:Opera 和IE7（及更高版本是禁止的）
+
+(4)窗口的大小
+IE9+、Firefox、Safari、Opera、Chrome提供4个属性：
+innerWidth\innerHeight\outerWidth\outerHeight
+
+>innerWidth,innerHeight:
+     返回视口大小（页面看的见的viewport的大小（包含body的margin属性值，但是不包含浏览器窗口边框和工具栏的大小））
+
+>outerWidth\outerHeight:
+     返回浏览器窗口本身的大小包含浏览器窗口边框和工具栏。
+>标准模式下：
+document.documentElement.clientWidth
+document.documentElement.clientHeight
+     >在移动设备中，随着浏览器的缩放，值也会做相应变化。
+     >在移动浏览器中，随着浏览器的缩放，值不变。
+混杂模式下：
+document.body.clientWidth,
+document.body.clientHeight
+     返回视口的大小，不包含margin属性的值。
+
+>resizeTo(新高度，新宽度)、resizeBy(与旧窗口的差值，与旧窗口的差值)
+     调整浏览器窗口的大小
+ps:Opera 和IE7（及更高版本是禁止的）
+
+(5)导航和打开窗口
+使用window.open(加载的URL，窗口目标，特性字符串，是否取代当前页面的布尔值)
+
+(5)系统对话框
+> alert()􏲀confirm()􏰧 prompt()显示的样式是根据操作系统和浏览器决定，而不是由css决定。显示弹框，代码执行暂停，关闭回复执行。
+
+>find()print()
+
+2、location对象：
+window.location、 document.location引用的是同一个对象，因为这个对象是window和location共同的属性。
+
+>查询字符串：
+hash url中#后面跟的字符
+host 服务器名或者端口号
+hostName     不带端口号的服务器名l
+href     加载页面的完整url（localtion.toString也返回该值）
+pathname        url的请求路径
+port     端口号
+protocol     页面使用协议
+search     返回查询字符串，以？开头的字符串
+oringin  只读属性
+示例：
+url："https://www.google.com.hk/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=%E6%B7%BB%E5%8A%A0%E5%85%AC%E6%B4%9E%E4%BA%8B%E4%BB%B6"
+
+>位置操作方法：
+location.assign
+location.href
+window.location
+三个方法设置一个url,重定向到新的地址。
+ps：
+>后两个方法值重定向的时候会为url值调用assign()方法。
+>每次修改localtion的属性页面会重新载入url，但是修改hash则不会载入
+>使用上面的属性修改url，每次浏览器会在url载入的时候添加一条新的历史记录。
+
+location.assign     替换的url保存在历史历史记录中
+location.reload     重新载入页面，不传参数，就会从缓存中加载，如果缓存中没有，传递参数true，从服务器重新加载。
+location.replace     使用该方法替换的url不保存在历史历史记录中
+
+3、navigator对象：
+获取客户端浏览器的详细信息
+
+4、screen对象：
+保存着与客户端显示器有关的信息。
+
+5、history对象：
+history对象是window的对象，每一个框架和标签都有自己的历史记录
+
+back()、forward()模拟浏览器中的前进和后退按钮
+go()，参数为负数表示后退，参数为整数表示前进.
+
+length:表示历史记录的条数。
+
+第十三章：事件
+
+1、事件流
+事件流：页面接收事件的顺序
+     IE:事件冒泡
+     网景：事件捕获
+
+- 冒泡（bubbling）：先子后父；
+- 捕捉（capturing）：先父后子；
+
+(1)事件冒泡：
+     文档层次嵌套最深的节点开始，逐级向上传递。移植到document对象。
+(2)事件捕获：
+     从文档节点的外层想里层传递，在到达目标之前就接收到事件。
+(3)DOM事件流：
+     DOM2级事件事件流三部分：捕获阶段、处于目标阶段、冒泡阶段
+
+2、事件处理程序：
+(1)HTML事件处理程序：
+每个元素支持的事件都可以在html特性中表示，该特性的值是可以执行的js代码。js不能直接写未经转义的HTML语法字符串，比如&、“”、<,>,使用之前那需要进行转义。
+示例：
+
+ <input type="button" value="Click Me" onclick=“alert(‘hello world!')" />
+
+<input type="button" value="Click Me" onclick="showMessage()" />
+ps:showMessage函数自带了event事件对象，在该函数里面，this = 事件的目标元素。
+
+ps:在这个里面定义的js作用域为全局作用域（如果全局作用域没有该方法就报错，比如在。）
+
+ps:如果在js没有加载完就点击事件会报错，处理方式是try{showMessage()}cache(){},在处理错误之前就捕获错误。
+
+(2)DOM0级事件：
+在事件流冒泡阶段执行。
+var btn = document.getElementById("myBtn");
+    btn.onclick = function(){
+        alert("Clicked");
+    };
+(3)DOM2级事件：
+addEventListener()
+removeEventListener()
+参数：事件名称，事件处理函数，布尔值（事件流方式，true：捕获，false：冒泡）
+ps:同一个元素绑定多个addEventListener事件会按顺序执行。
+
+(4)IE事件处理事件：
+attachEvent()
+detachEvent()
+参数：事件处理名称（ps:带on），事件处理函数
+ps:同一个元素绑定多个attachEvent事件不按顺序执行。
+
+3、事件对象：
+触发DOM上的事件给事件传一个event对象，该对象中包括事件的所有信息。只在事件发生的过程有效。
+
+(1)打印鼠标事件的对象：
+
+Event属性和方法：
+1、altKey：检查alt键的状态。
+语法：event.altKey
+可能的值：当alt键按下时，值为 true ，否则为 false 。只读。
+2、button：检查按下的鼠标键。
+语法：event.button
+可能的值：
+
+- 0 没按键
+- 1 按左键
+- 2 按右键
+- 3 按左右键
+- 4 按中间键
+- 5 按左键和中间键
+- 6 按右键和中间键
+- 7 按所有的键
+
+这个属性仅用于onmousedown, onmouseup, 和 onmousemove 事件，其他事件统一返回0.
+3、cancelBubble：是否取消冒泡，部分浏览器废弃，用stopPropagation()代替 。
+event.cancelable为true则阻止默认行为。
+语法：event.cancelBubble[ = cancelBubble]
+可能的值：这是一个可读写的布尔值:
+     true 不被上层原素的事件控制。
+     flase 允许被上层元素的事件控制(默认值)
+4、cancelBubble：事件是否取消
+取消一个事件的默认动作,可以调用该事件的 preventDefault()方法.
+5、target：返回触发事件的元素。
+6、currentTarget：返回绑定事件的元素
+4、clientX：返回鼠标在窗口客户区域中的X坐标。
+语法：event.clientX(只读)
+5、clientY：返回鼠标在窗口客户区域中的Y坐标。
+语法：event.clientY(只读)
+6、ctrlKey：检查ctrl键的状态。
+语法：event.ctrlKey
+可能的值：当ctrl键按下时，值为 true ，否则为 false 。只读。
+7、fromElement：检测 onmouseover 和 onmouseout 事件发生时，鼠标所离开的元
+语法：event.fromElement(只读)
+8、keyCode：检测键盘事件相对应的数字值( onkeydown, onkeyup, 和 onkeypress 事件)
+语法：event.keyCode[ = keyCode]
+可能的值：Unicode键盘(可读写)默认为0.
+9、offsetX：检查相对于触发事件的对象，鼠标位置的水平坐标
+语法：event.offsetX
+10、offsetY：检查相对于触发事件的对象，鼠标位置的垂直坐标
+语法：event.offsetY
+11、propertyName：设置或返回元素的变化了的属性的名称。
+语法：event.propertyName [ = sProperty ]
+可能的值：sProperty 是一个字符串，指定或返回触发事件的元素在事件中变化了的属性的名称。(可读写)。无默认值。触发onpropertychange 事件获得该值
+
+12、returnValue：设置或检查从事件中返回的值
+语法：event.returnValue[ = Boolean]
+
+可能的值：
+true 事件中的值被返回
+false 源对象上事件的默认操作被取消
+
+13、screenX：检测鼠标相对于用户屏幕的水平位置
+语法：event.screenX（只读属性）
+
+14、screenY：检测鼠标相对于用户屏幕的垂直位置
+语法：event.screenY（只读属性）
+15、shiftKey：检查shift键的状态。
+语法：event.shiftKey
+可能的值：当shift键按下时，值为 TRUE ，否则为 FALSE 。只读。
+16、srcElement：返回触发事件的元素。只读。例子见本文开头。
+语法：event.srcElement
+17、srcFilter：返回触发 onfilterchange 事件的滤镜。只读。
+语法：event.srcFilter
+18、toElement：检测 onmouseover 和 onmouseout 事件发生时，鼠标所进入的元素。 语法：event.toElement（只读属性）
+19.type：返回事件名。
+语法：event.type（只读）
+注释：返回没有“on”作为前缀的事件名
+20. x/y：返回鼠标相对于css属性中有position属性的上级元素的x/y轴坐标。如果没有css属性中有position属性的上级元素，默认以body元素作为参考对象。
+语法：event.x（只读属性）
+注释：如果事件触发后，鼠标移出窗口外，则返回的值为 -1
+21：isPropagationStopped() 方法检查指定的事件上是否调用了 event.stopPropagation()。
+
+(2) touchEvent对象：
+包含了对手势判断的属性：
+
+- touches：表示当前跟踪的触摸操作的touch对象的数组。
+当一个手指在触屏上时，event.touches.length=1,
+- 当两个手指在触屏上时，event.touches.length=2，以此类推。
+- targetTouches：绑定事件的那个结点上的触摸点的集合列表。
+因为touch事件是会冒泡的，所以利用这个属性指出目标对象。
+
+在移动端事件用touch事件，因为click点击事件是针对pc设计的，所以点击后悔等待第二次点击的发生，这个会导致在移动端有300ms的延迟，所以在移动端使用touch事件
+
+4.事件类型：
+(1)UI事件:
+
+load:当页面所有资源完全加载完才执行。
+unload：跳出页面的时候触发
+abort：
+error：js加载报错触发
+select：选择文本触发
+resize：窗口和框架大小改变
+scroll：元素有滚动条滚动触发
+     通过scrollLeft，scrollTop
+使用document.implementation.hasFeature("HTMLEvents", "2.0")方法检测浏览器对事件的支持情况。
+
+比较1：和jquery的ready()方法的区别是：ready当加载完dom结构就触发。
+
+5、内存和性能：
+（1）事件委托：利用冒泡原理，只指定一个事件处理程序处理该类型的所有事件，
+优点：
+不用给每个元素重复定义同一事件类型(选项卡)
+document对象可以快速访问
+页面设置事件处理程序花时减少
+内存空间减少
+
+6、模拟事件：
+DOM中的事件模拟：
+（1）创建事件：
+在document对象上用createEvent（para）创建对象
+参数para：表示事件类型的字符串。
+事件类型有：
+
+- UIEvents
+- MouseEvents
+- MutationEvents
+- HTMLEvents
+
+（2）触发事件：
+
+- dispatchEvent（para）
+
+参数：para:表示触发事件的event对象
+
+示例：
+// 创建事件对象
+//初始化
+// 触发
+var event = document.createEvent("MouseEvents");
+event.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+btn.dispatchEvent(event);
+
+键盘模拟事件：
+创建（初始化以后会给事件对象返回一个初始化initKeyEvent方法，包含键盘的一些属性）
+触发
+
+添加：
+事件的添加兼容IE浏览器，
+
+第九章：
+检测规则：
+1、同一作用的方法，先检测常用的，后检测不常用，
+
+第十七章：
+1、浏览器：
+（1）IE：左下角黄色图标
+（2）firefox：打印错误到控制台，每一行后面错误代码的行号，点击行号跳转到错误代码所在文件的位置。
+（3）Safari:
+（4）opera:
+（5）chrome：
+共同点：
+默认情况下都会隐藏js错误，该错误会被记录在控制台中，如果想要查看错误信息需要打开控制台进行查看。
+打印错误和警告到控制台,每一行后面错误代码的行号，点击行号跳转到错误代码所在文件的位置。
+
+3、错误事件error：
+> 兼容：（oprea和safari不支持onerror事件）
+> 没有通过try-catch 处理的的错误会触发window的error事件。
+> window的onerror事件不创建event对象，但是传递三个参数：错误信息、错误所在url(文档的位置)、错误所在行号.
+>Image对象支持error事件，当访问的src找不到就会抛出错误。（发生该事件的时候图片已经下载完，不再重新下载）
+4、处理错误的策略：
+(1) 常见错误类型：
+类型转化错误：场景：==和=！(会强制转化类型进行比较)（所以建议使用===和！==），if、form、while判断语句不是标准的boolean值（ps:恰当的类型比较。）
+数据类型错误：使用数据类型检测操作符（ typeof检测基本类型的值， instanceof检测对象的值）
+通信错误：
+url错误和url编码错误。
+数据错误
+
+2、错误处理：
+（1）try-catch:
+ try{
+
+// 有可能会发生错误的代码
+
+} catch(error){
+
+// 错误处理
+
+}
+
+示例：
+
+ try {
+
+window.someUndefineFunction();
+
+} catch (error){
+
+console.log("An error happened!");
+
+console.log(error);
+
+}
+
+控制台打印：
+
+各浏览器给error对象添加的属性：(共同支持message属性。)
+
+>IE:添加了description（和message属性一样） 、number (内部错误条数)
+
+>fixfox：fileName、lineNumber、stack
+
+>Safari :line (行号)、sourceId(内部错误代码)、sourceURL
+
+>chrome:
+
+（2）finally语句：
+
+无论代码执行try还是cache语句块，最后都会执行finally语句。
+
+
+
+
+
+
+
+
+function testFinally(){
+        try {
+                return 2;
+        } catch (error){
+                return 1;
+        } finally {
+                return 0;
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ps:IE7及其之前版本有一个bug,除非执行catch语句，否则就不执行finally语句。
+
+3、抛出错误：
+throw语句：
+抛出错误时只需给throw操作符指定一个值（无类型限制）。
+当代码执行遇到throw之后代码立即停止，直到try语句捕获被抛出的值。
+利用原型链可以通过继承Error来创建自定义的错误类型。
+
+4、错误类型：
+      EvalError        eval函数没有被正确执行时。
+      RangeError      一是数组长度为负数，二是Number对象的方法参数超出范围，以及函数堆栈超过最大值。
+      ReferenceError     引用错误，对象表明一个不存在的变量被引用。
+      SyntaxError          语法错误
+      TypeError       对字符串、布尔值、数值等原始类型的值使用new命令，就会抛出这种错误，因为new命令的参数应该是一个构造函数
+      URIErrorurl         只有在调用这几种方式时url格式不正确，encodeURI()、decodeURI()、encodeURIComponent()、decodeURIComponent()、escape()和unescape() ，才会报错
+
+5、调试技术：
+（1）console打印到控制台：
+ error()错误消息
+ log()一般消息
+ info()消息性消息
+ warn()警告
+（2）throw error抛出错误。
+
+（3）自定义函数将错误信息插入到页面。
+
+
+参考文档：https://msdn.microsoft.com/zh-cn/library/dww52sbt(v=vs.94).aspx
+
+ 第20章json
+一、语法：
+js字符串和json字符串区别：json字符串需要使用“”双引号。
+1、对象：
+json对象和js字面量对象区别:
+（1）json属性名一定只能用双引号，单引号容易出错。
+（2）json对象结尾不用加封号，js需要加’；’。
+相同特性：
+（1）属性值可以是简单值或者复杂值。
+（2）以键值对方式存储。
+
+2、数组：
+数组的每一项包含一个json对象，每一个对象都有各自的属性，这些属性之间互不影响，也就是说同名也没有关系。
+
+try {
+      window.someUndefineFunction();
+} catch (error){
+      console.log("An error happened!");
+      console.log(error);
+      console.log(error.stack);
+}
+二、解析：
+     json解析为js对象数据结构。
+1、json对象方法：
+（1） stringify(value[, replacer [, space]]) 用于把js对象序列化成JSON字符串
+          >value：要序列化的js对象字符串。
+                  >replacer(para1[,para2])：
+                     该参数为函数:para1和para2为
+                              参数1和2代表的是json对象中的key和value。
+                     该参数为数组：
+                     (1) 数组：包含在该数组的属性名才会被序列化到json字符串中，数组中属性位置决定序列化json对象中的位置
+                     (2) null或者未提供，所有属性都会被解析
+
+
+                  >space：用来控制结果字符串里面的间距
+                              数字：代表多少空格，上线为10，值小于1，则没有空格。每一级别会比上一级别多缩进这个数字值的空格。
+                              字符串：该字符串就会被作为空格。每一级别会比上一级别多缩进该字符串。
+                 null或者不提供：没有空格。
+
+
+（2）parse(JSONString[,reviver]) 用于把JSON字符串解析为原生js值。
+          JSONString:要解析的 JSON 字符串
+          reviver:用来转化解析出的属性值的函数,会在每一个键值对上调用,有两个参数key.。
+
+
+（3）toJSON();
+
+第九章能力检测：
+1、能力检测：
+确定浏览器支持的特点能力。
+（1）模式：
+if(判断某个方法是否存在){
+     使用该方法；
+}else{
+     使用适合该浏览器的方法；
+}
+（2）规则：检测常用的特性，避免检测更多条件。
+                    能力检测不代表浏览器检测。
+2、怪癖检测：
+检测浏览器存在的bug
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Enumerable_attribute
+
+二十一章：ajax以及跨域请求
+AJAX （Asynchronous JavaScript + XML  ）
+XML 被设计用来传输和存储数据
+html 是用来展示数据的
+
+1、XMLHttpRequest 对象
+用于在后台与服务器交换数据：
+特点：
+在不重新加载页面的情况下更新网页
+在页面已加载后从服务器请求数据
+在页面已加载后从服务器接收数据
+在后台向服务器发送数据
+属性：
+
+（1）IE7之前XHR对象是由ActiveX对象实现
+
+2、XMLHttpRequest 2对象
+
+3、进度事件:
+loadstart:
+progress:
+error:
+abort:
+load
+loadend
+
+第二十三章 离线应用与客户端存储
+1、离线检测
+（1）navigator.onLine  布尔值
+          ps:不同浏览器存在兼容性的问题
+支持：IE7之前、chrome11之后的版本。。。
+（2）h5为window对象定义的事件 online和offline
+支持：IE6+（只支持navigator.onLine）、Firefox3、Safari4、Opera10.6、Chrome、 iOS3.2版Safari、Android版WebKit
+     示例：
+var line = navigator.onLine;
+console.log(line);
+window.addEventListener("online",function(){
+    console.log('online');
+},true);
+window.addEventListener("offline",function(){
+    console.log('offline');
+},true);
+
+2、应用缓存（appcache）
+     专门为开发离线web应用而设计的。在浏览器缓存中分出来一块缓存。
+   <html manifest="/offline.manifest">
+   HTML属性manifest定义一个 文件路径，offline.manifest这个文件包含了浏览器需要为你的应用缓存的资源(文件)列表。
+      ps:缓存文件扩展名现在是appcache后缀
+您需要注意以下几点：
+CACHE MANIFEST 字符串应在第一行，且必不可少。
+如果清单文件或其中指定的资源无法下载，就无法进行整个缓存更新进程。在这种情况下，浏览器将继续使用原应用缓存。
+
+   （1）通过检测applicationCache对象：
+           ps:事件触发的顺序是按照下面的的顺序触发。
+    >应用缓存相关的事件：
+         checking    第一次下载manifest清单时，它往往是第一个被触发的事件
+                   error            在检查更新和下载资源期间发生的错误触发。
+         noupdate     当检查到Manifest中清单文件不需要更新时，触发该事件
+         downloading  第一次下载或更新manifest清单文件时
+         progress  该事件与downloading类似，但downloading事件只触发一次。Progress事件则在清单文件下载过程中周期性触发
+         updateready      此事件的含义表示缓存清单文件已经下载完毕，可通过重新加载页面读取缓存文件或者通过方法swapCache切换到新的缓存文件。常用语本地缓存跟新版本后的提示
+         cached     当manifest清单文件下载完毕及成功缓存后
+         Obsolete         加入访问manifest缓存文件返回HTTP404错误（页面未找到）或者410错误（永久消失）时，触发该事件
+
+
+CHECKING:2   applicationCache.CHECKING
+DOWNLOADING:3     applicationCache.DOWNLOADING
+IDLE:1     applicationCache.IDLE
+OBSOLETE:5     applicationCache.OBSOLETE
+UNCACHED:0     applicationCache.UNCACHED
+UPDATEREADY:4     applicationCache.UPDATEREADY
+
+     >applicationCache.status:
+          0     无缓存，没有与页面相关的缓存
+          1     闲置，应用缓存未得到更新
+          2     检查中，即正在下载描述文件并检查更新
+          3     下载中，正在下载manifest中描述的文件
+          4     更新完成，即更新的缓存已经更新完了缓存，所有资源已经下载完了，可以使用通过swapCache()来启用新的缓存文件。applicationCache.swapCache();
+                      5     废弃，表示查找的文件不存在。
+（2）通过调用applicationCache.swapCache()方法来启动应用的新缓存。
+
+3、数据存储
+（1）cookie
+子cookie
+（2）web存储机制：
+        storage类型：
+          clear()     删除所有值
+          key(index)     获取index位置值的名字
+          getItem(name)     获取指定name的值
+     setItem(name)     为指定name的设置值
+     removeItem(name)     删除指定name的名值对
+        ( a ) sessionStorage对象(浏览器关闭或标签关闭时消失)
+          sessionStorage是storage的实例
+获取属性的方法：
+      示例：
+var book = sessionStorage.book  //获取对象的属性
+var name = sessionStorage.getItem("name”) //访问对象的方法
+删除属性的方法：
+      示例：
+delete sessionStorage.book  //使用delete操作符
+var name = sessionStorage.removeItem("name”) //removeItem方法
+        ( b ) globalStorage对象（除非使用removeItem和delete删除以及浏览器缓存清理，不然数据会一直保存下去）
+          globalStorage不是storage的实例，但是，globalStorage的每个属性都是storage的实例。
+          限制：是根据发送请求页面的与，域名、协议端口号限制的。
+               示例：
+               globalStorage[‘www.meituan.com'].name = meituan;
+               ps: 访问页面时使用https，端口号为80，如果使用相同域名www.meituan.com访问，协议为http，端口为8080则不会访问到数据。
+
+        ( c ) localStorage对象
+               localStorage是storage的实例
+               作用：持久会话存储数据
+               限制：页面必须在来自同一个域名下（子域名不可以）、同一协议、同一端口下。
+         (d) Storage事件：
+         事件触发，当Storage对象发生变化的时候回触发、比如调用storage的属性和方法操作对象。
+         event对象属性：
+domain
+key
+newValue
+oldValue
+
+（3）indexDB(indexed database API)数据库
+          特点：使用对象保存数据.
+          创建步骤：
+               a、打开数据库（可以指定版本）。
+                    示例：
+                    var request = window.indexedDB.open(“MyTestDatabase"，version);//version打开指定版本号数据库
+               b、创建一个对象存储空间（object story）（onupgradeneeded 是我们唯一可以修改数据库结构的地方）。
+                    var objectStore = db.createObjectStore("name4", { keyPath: "myKey4" });
+               c、构建一个事务transaction()，像读取修改数据等。
+                    transaction([para1,para11],para2);参数一传入对象存储空间的列表，可以传入多个；参数二表示对存储空间的访问模式，IDBTransaction.READ_ONLY（READ_ONLY:0只读,READ_WRITE:1读写,VERSION_CHANGE:2改变)。取的空间索引之后使用objectStore()方法传送存储空间的名称。
+                    var transaction = db.transaction();
+          var store = db.transaction("users").objectStore("users"),
+        d、使用游标查询：
+          var request = store.openCursor();
+          request.onsuccess = function(e){
+               // 成功event.target.result
+          }
+    request.onerror = function(e){
+   // 失败var result = event.target.result
+   // result中有一个IDBCursor实例
+   //direction游标方向：
+     IDBCursor.NEXT（0）下一项
+     IDBCursor.NEXT_NO_DUPLICATE（1）下一个不重复的项
+     IDBCursor.PREV（2）前一项
+     IDBCursor.PREV_NO_DUPLICATE() 前一个不重复的项
+key对象的键值
+value实际对象
+primaryKey游标使用的
+          }
+默认情况下，每个游标只发起一次请求。要想发起另一次请求，必须调用下面的方法： continue(key):移动到结果集的下一项，参数key可选，不指定参数，游标移动到下一项，指定参数游标会移动到指定键的位置。
+advance(count):向前移动count指定的项数。
+
+               e、在操作结果上进行一些操作（可以在 request 对象中找到）。
+
+          示例新建数据库：
+var indexedDB = window.indexedDB || window.msIndexedDB || window.mozIndexedDB || window.webkitIndexedDB;
+var request, database;
+request = indexedDB.open("huo”);
+//open(dataName)
+//如果有数据库名存在就发送打开数据库请求，如果数据库名不存在就发送新建数据库请求，返回IDBRequest对象。
+request.onerror = function(event){
+    alert("Something bad happened while trying to open: " +
+    event.target.errorCode);
+};
+request.onsuccess = function(event){
+    database = event.target.result;
+    console.log(database);
+};
+
+
+setVersion()给数据库设置版本号。设置之前检测版本号是否存在(database.version)。
+add()插入新值
+put()更新原有值
+add和put操作会发起请求，可以通过success和error事件处理请求返回值。
+objectStore()传入存储空间的名称
+事件：
+     onerror,
+     onsuccess,
+     oncomplete，
+     onupgradeneeded 当修改当前存储数据库的版本号时触发
+
+参考API:https://www.w3.org/TR/IndexedDB/#events
+
+第二十二章：高级技巧：
+一、高级技巧
+4、函数绑定bind()
+     代码：
+// 事件兼容对象
+var EventUtil = {
+    addHandler: function(element, type, handler){
+        if (element.addEventListener){
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent){
+            element.attachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = handler;
+        }
+    },
+    removeHandler: function(element, type, handler){
+        if (element.removeEventListener){
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent){
+            element.detachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = null;
+        } }
+};
+var bindButton = document.getElementsByClassName("bindButton");
+var handler = {
+    message: "event handle",
+    handleClick: function(e){
+        console.log(this);
+        console.log(this.message);
+    }
+}
+（1）自定义一个bind（）封闭函数，让this不要只想window作用域
+EventUtil.addHandler(bindButton[0], "click", function(e){
+    console.log(this);
+    console.log(e);
+    handler.handleClick();
+});
+（2）使用原生的bind()方法：
+          bind()方法会创建一个新函数，新函数与被调函数（绑定函数的目标函数）具有相同的函数体。当这个新函数被调用时，新函数的this值是传递给bind()的第一个参数, 新函数的参数是bind()方法的其他参数和新函数原本的参数.
+         语法：
+               fun.bind(thisArg[, arg1[, arg2[, ...]]])
+               参数：
+       thisArg  当绑定函数被调用时，该参数会作为原函数运行时的 this指定对象。
+       arg1, arg2, ...  当绑定函数被调用时，这些参数加上绑定函数本身的参数会按照顺序作为原函数运行时的参数。
+     EventUtil.addHandler(bindButton[0], "click",handler.handleClick.bind(handler));
+
+
