@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453749)"/><meta name="altitude" content="40"/><meta name="author" content="1294262149@qq.com"/><meta name="created" content="2016-08-19 10:39:49 +0000"/><meta name="latitude" content="40.00663709979609"/><meta name="longitude" content="116.4812007421563"/><meta name="source" content="desktop.mac"/><meta name="updated" content="2016-09-20 13:24:42 +0000"/><title>js高级程序设计学习2016.08.19：</title></head><body>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">1、开始和结束标签之间只要存在内容就会创建一个text类型的文本节点。</span></div>
+<div><span style="font-size: 12px;">2、为什么每个元素只有一个文本节点？</span></div>
+<div><span style="font-size: 12px;">3、为什么要分开文本节点字符串，</span></div>
+<div><span style="font-size: 12px;">4、Text类型提供的方法normalize()、splitText()(按照指定的位置分割nodevalue，原来的文本节点包含从开始到指定位置的内容，新节点包含从指定内容到结束的内容，ps：该方法还返回一个新文本节点，该节点与原节点的parentNode相同。)</span></div>
+<div><span style="font-size: 12px;">按照指定的位置是什么位置？</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">5、<span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">div.classList.contains</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);"><br/></span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">6、焦点管理：</span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">document.activeElement属性,该属性始终会引用当前获得焦点的的元素，（例子）</span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);"><br/></span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">》元素获得焦点的方式：页面加载、用户输入、调用focus（）</span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);"><br/></span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">ps:文档刚刚加载完</span></span></span><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">document.activeElement保存的是document.body元素的引用，</span></span></span><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">文档加载期间</span></span></span><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">document.activeElement保存的是null.</span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">ps:作用：通过判断</span></span></span><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">document.activeElement检测页面是否有交互在进行。</span></span></span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">7、HTMLDocument变化</span></div>
+<div><span style="font-size: 12px;">》readyState属性{loading：正在加载，complete：已经加载完文档。}</span></div>
+<div><span style="font-size: 12px;">》document.compatMode{标准模式下：document.compatMode = CSS1Compat，</span></div>
+<div><span style="font-size: 12px;">混杂模式下document.compatMode = BackCompat}</span></div>
+<div><span style="font-size: 12px;">&gt;document.head属性</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">8、字符集属性：</span></div>
+<div><span style="font-size: 12px;">》document.charset表示文档实际使用的字符集。可以使用《meta》标签的charset进行修改。</span></div>
+<div><span style="font-size: 12px;">》document.defaultcharset</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">9、自定义数据属性，h5扩展非标准的属性以data-前缀开头提供与元素渲染无关的信息，使用元素dataset方法来访问自定义属性的值.</span></div>
+<div><span style="font-size: 12px;">例如：&lt;div id=“myDiv” data-myName = “tom"&gt;</span></div>
+<div><span style="font-size: 12px;">var a =document.getElementByid(‘myDiv');</span></div>
+<div><span style="font-size: 12px;">取得：var a =div.dataset.name;</span></div>
+<div><span style="font-size: 12px;">设置：div.dataset.name = ‘huohuo';</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">10、插入元素</span></div>
+<div><span style="font-size: 12px;">innerHTML：读模式下</span></div>
+<div><span style="font-size: 12px;">outerHTML:读模式下</span></div>
+<div><span style="font-size: 12px;">insertAdjacentHTML（插入位置，插入的html代码）</span></div>
+<div><span style="font-size: 12px;">          插入位置：beforebegin</span></div>
+<div><span style="font-size: 12px;">                            afterbegin</span></div>
+<div><span style="font-size: 12px;">                            beforeend</span></div>
+<div><span style="font-size: 12px;">                            beforeend</span></div>
+<div><span style="font-size: 12px;">ps:使用innerHTML相比多次操作DOM创建节点再指定之间的关系效率要高好多，是因为设置innerHTML，outerHTML的时候会创建一个html解析器</span></div>
+<div><span style="font-size: 12px;">ps：为什么会创建解析器？？</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">11、为了解决如何滚动页面，h5扩展ScrolIntoView()方法</span></div>
+<div><span style="font-size: 12px;">》可在所有HTML上调用</span></div>
+<div><span style="font-size: 12px;">例如：document.form[0].ScrolIntoView();//让元素可见</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">12、专有扩展</span></div>
+<div><span style="font-size: 12px;">》使用document.documentMode可以获取当前文档模式使用的是什么模式。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">第12章DOM扩展</span></div>
+<div><span style="font-size: 12px;">DOM2、DOM3级用来扩展DOM API</span></div>
+<div><span style="font-size: 12px;">DOM2只是基于1基础添加了属性和方法</span></div>
+<div><span style="font-size: 12px;">DOM3基于1基础添加了属性和方法(加强)，还添加了新的类型。</span></div>
+<div><span style="font-size: 12px;">var supportDOM2Core  = document.implementation.hasFeature("core","2.0”); // 返回的是布尔值<img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-25%20%E4%B8%8A%E5%8D%8810.10.53.png" height="218" width="1136"/></span></div>
+<div><span style="font-size: 12px;">1、什么是XML的命名空间</span></div>
+<div><span style="font-size: 12px;">2、DocumentType类型新增了3个属性 publicId、systemId、</span></div>
+<div><span style="font-size: 12px;">3、document类型有几种？</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">Document类型中唯一与命名空间无关的方法是importNode(</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">para1,para2</span><span style="font-family: Courier;">)</span></span></div>
+<div><span style="font-size: 12px;">para1:需要被复制的节点</span></div>
+<div><span style="font-size: 12px;">para2:是否复制该节点的子节点</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">DOM1级有<span style="color: rgb(77, 78, 83); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">hasFeature方法用来结案侧浏览器是否支持摸个文档模型</span></span></div>
+<div><span style="font-size: 12px;">=====</span></div>
+<div><span style="font-size: 12px;">Document类型的变化：</span></div>
+<div><span style="font-size: 12px;">=========================</span></div>
+<div><span style="font-size: 12px;">DOM2级核心  document新增方法：</span></div>
+<div><span style="font-size: 12px;">     document<span style="font-family: Courier;">.</span><span style="font-family: Courier;">importNode(oldNode, true);</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">  document.defaultView</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">  document.parentWindow;</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">  document.implementation对象新增的两个方法：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     （1）</span><span style="font-family: Courier;">createDocumentType()</span><span style="font-family: Courier;">接收三个参数：文档类型的名称、</span><span style="font-family: Courier;">publicId、</span><span style="font-family: Courier;">systemId（ps:该方法只在创建新文档的时候有用）</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     （2）createDocument()接收三针对文档中的</span> <span style="font-family: Courier;">namespaceURI文档元素的标签名、新文档的文档类型。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">示例：</span>document<span style="font-family: Courier;">.</span><span style="font-family: Courier;">importNode.</span><span style="font-family: Courier;">createDocumentType(</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">"html",</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">" -//W3C//DTD XHTML 1.0 Strict//EN",</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">"<a href="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</a>"</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">)</span></span></div>
+<div><span style="font-size: 12px;">document<span style="font-family: Courier;">.</span><span style="font-family: Courier;">importNode.</span><span style="font-family: Courier;">createDocument(</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><font face="Courier">"</font><a href="http://www.w3.org/1999/xhtml" style="font-family: Courier;">http://www.w3.org/1999/xhtml</a><font face="Courier">”</font><font face="Courier">,</font></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><font face="Courier">"html",</font></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><font face="Courier">doctype</font></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">) // Uncaught SyntaxError: Invalid or unexpected token</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">DOM2级HTML模块</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document.implementation</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">createHTMLDocument()创建一个完整的HTML文档，包括html和body等标签。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">Node类型的变化：</span></div>
+<div><span style="font-size: 12px;">=========================</span></div>
+<div><span style="font-size: 12px;">DOM2 唯一与命名空间无关的变化添加<span style="font-family: Courier;">isSupported()方法，类似</span><span style="font-family: TimesNewRoman;">DOM1 引入放入</span> <span style="font-family: Courier;">docum</span><span style="font-family: Courier;">ent.implementation的方法</span><span style="font-family: Courier;">hasFeature()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">isSupported(特性号，特性版本号)用于确定当前节点具有什么能力，如果浏览器能够将给定的特性号的特性版本实现该函数返回true。（简单说就是检测某个特性是否能使用（能力检测））</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">DOM3 引入<span style="font-family: Courier;">isSameNode(para)和</span> <span style="font-family: Courier;">isEqualNode(</span><span style="font-family: Courier;">para</span><span style="font-family: Courier;">)返回布尔值</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     相同：两个节点引用同一个对象</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     相等：两个节点是相同的类型，包括里面属性名和位置都相同。</span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-25%20%E4%B8%8B%E5%8D%8810.25.55.png" height="596" width="750"/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">setUserData(要设置的键，实际数据（）数据类型不限，处理函数function)将数据指定给节点，</span><span style="font-family: Courier;">处理          函数function(操作类型的数值，数据键，数据源，源节点，目标节点){</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     // </span><span style="font-family: Courier;">操作类型的数值有：1-》复制，2-》导入，3-》删除，4-》重命名</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     在函数内部可以自已定义如何存储数据。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">}</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">getUserData("name")</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">框架和内嵌框架</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">HTMLFrameElement和</span><span style="font-family: Courier;">HTMLIFrameElement，在DOM2级有一个新的属性</span><span style="font-family: Courier;">contentDocument</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">样式变化：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">style对象的属性和方法变化：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">任何style特性的html元素在js中都有一个对应的style属性，该style对象是</span><span style="font-family: Courier;">CSSStyleDeclaration的实例，如果没有给元素设置style属性，在style对象中会有默认样式。</span></span></div>
+<div><span style="font-size: 12px;">（1）将在style中使用短划线的css样式在js中使用驼峰命名方式调用</span></div>
+<div><span style="font-size: 12px;">（2）使用<span style="font-family: Courier;">cssText属性指定对个css键值属性。</span></span></div>
+<div><span style="font-size: 12px;">获取css属性的值：</span></div>
+<ol start="0" style="list-style-type: none">
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">getPropertyValue(css属性名) // 返回属性值</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">getPropertyCSSValue() // 返回cssValue对象,包含两个属性</span> <span style="font-family: Courier;">cssText</span> <span style="font-family: Courier;">cssValueType(表示值的类型) 0：继承，1：基本值，2：值列表，3：自定义值</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">removeProperty（要移除的属性名）</span></span></li>
+</ol>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">计算样式：</span></div>
+<div><span style="font-size: 12px;">示例：</span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.32.40.png" height="452" width="1280"/></span></div>
+<div><span style="font-size: 12px;">增强了<span style="font-family: Courier;">document.defaultView（ps:在浏览器中该属性返回当前document所关联的window对象）</span></span></div>
+<ol start="0" style="list-style-type: none">
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">添加</span> <span style="font-family: Courier;">getComputedStyle(需要计算样式的元素，伪元素字符串)参数二可以使null，该方法返回</span> <span style="font-family: Courier;">CSSStyleDeclaration对象，里面包含当前元素的所有要计算样式。</span><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.05.53.png" height="786" width="1010"/><br/>
+<br/></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">getComputedStyle返回的对象和element.style返回的对象是同一类型，都是</span><span style="font-family: Courier;">CSSStyleDeclaration对象，</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">（1）不同的是</span><span style="font-family: Courier;">getComputedStyle对象是只读的，</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">（2）element.style返回的对象是读、写模式</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">找到的解释：</span></span></li>
+<li><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.10.53.png" height="101" width="660"/></span></li>
+<li><span style="font-size: 12px;">验证：</span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">getComputedStyle：</span></span></li>
+<li><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.10.27.png" height="123" width="665"/><br/>
+<span style="font-family: Courier;">element.style:</span></span></li>
+<li><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.19.03.png" height="152" width="792"/><br/>
+<br/></span></li>
+<li><span style="font-size: 12px;">该属性没有设置过style属性，返回值就为空,很奇怪：</span></li>
+<li><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.31.28.png" height="174" width="488"/></span></li>
+</ol>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">打印发现不同：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">element.style只获取</span><span style="font-family: Courier;">style属性设置过的样式，而</span><span style="font-family: Courier;">getComputedStyle是获取所有最后会应用到元素上的样式。</span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8B%E5%8D%881.42.20.png" height="370" width="878"/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">操作样式：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document.implementation.hasFeature(特性, 特性版本号);返回的布尔值。</span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8A%E5%8D%8810.38.05.png" height="212" width="810"/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">样式-》偏移量：</span></div>
+<ul style="list-style-type: none">
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">offsetHeight</span> 和<span style="font-family: Courier;">offsetWidth:表示元素的content+padding+border的宽高。</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">offsetTop</span> 和 <span style="font-family: Courier;">offsetLeft ：表示元素外边框到父元素内边框的距离。</span></span></li>
+</ul>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     </span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     </span><span style="font-family: Courier;">clientHeight和</span><span style="font-family: Courier;">client</span><span style="font-family: Courier;">Width：表示元素的</span><span style="font-family: Courier;">content+padding。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     </span></span></div>
+<ul style="list-style-type: none">
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">scrollHeight 和</span><span style="font-family: Courier;">scroll</span><span style="font-family: Courier;">Width：</span><span style="font-family: Courier;">表示元素的</span><span style="font-family: Courier;">content+padding+滚动条。</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">scroll</span><span style="font-family: Courier;">Top</span> 和 <span style="font-family: Courier;">scroll</span><span style="font-family: Courier;">Left ：表示页面</span><span style="color: rgb(0, 0, 0); font-family: Helvetica, Tahoma, Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">隐藏在内容区域上方和左边的像素数</span><span style="font-family: Courier;">。</span></span></li>
+</ul>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">getBoundingClientRect()返回一个对象，</span><span style="font-family: Courier;">left<span style="font-family: FZSSJW--GB1-0;">，</span></span><span style="font-family: Courier;">top<span style="font-family: FZSSJW--GB1-0;">，</span></span><span style="font-family: Courier;">right，</span><span style="font-family: Courier;">bottom,width,height，表示当前元素相对视口的位置和元素。</span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-26%20%E4%B8%8B%E5%8D%8812.51.01.png" height="348" width="882"/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">遍历：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">NodeIterator和</span><span style="font-family: Courier;">TreeWalker从根节点开始执行深度优先遍历。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">（1）NodeIterator:元素调用nextNode()遍历该元素的所有子元素，直到</span><span style="font-family: Courier;">nextNode()返回null，使用</span><span style="font-family: Courier;">previousNode()往回查找一个节点，</span></span></div>
+<div><span style="font-size: 12px;">（2）<span style="font-family: Courier;">TreeWalker：可以各个方向进行遍历</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">parentNode()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">firstChild()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">lastChild()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">nextSibling()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">previousSibling()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">5、js中DOM的那些坑：</span></div>
+<div><span style="font-size: 12px;">          <a href="https://segmentfault.com/a/1190000002650240">https://segmentfault.com/a/1190000002650240</a></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">6、移动端Touch事件：<a href="http://note.isongli.cn/blog/post/admin/%E7%A7%BB%E5%8A%A8%E7%AB%AFtouch%E4%BA%8B%E4%BB%B6.md">http://note.isongli.cn/blog/post/admin/%E7%A7%BB%E5%8A%A8%E7%AB%AFtouch%E4%BA%8B%E4%BB%B6.md</a></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">Node类型：</span></div>
+<div><span style="font-size: 12px;">document类型：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document是</span><span style="font-family: Courier;">HTMLDocument的一个实例，</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">element类型：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">特性：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">方法：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">属性：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">name。。。Map</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">Text类型：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">第八章：BOM</span></div>
+<div><span style="font-size: 12px;">1、window对象：</span></div>
+<div><span style="font-size: 12px;">(1)全局作用域：</span></div>
+<div><span style="font-size: 12px;">global对象是js的全局对象，但在浏览器中，<span style="font-family: TimesNewRoman;">ECMAScript 规定window对象为global对象，</span>浏览器制造商根据自己的浏览器特性，在window对象中添加了一些属性和方法来更好的支持js。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">浏览器中定义的所有属性和方法都属于window对象，在调用的时候，按照规定是使用window.方法(),也可以不适用window.,直接使用方法默认也是window对象调用的。</span></div>
+<div><span style="font-size: 12px;">示例：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">var age = 29;</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">function sayAge(){</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">    console.log(this.age);</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">}</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">age;//29</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">window.age; //29</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">sayAge(); //29</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">window.sayAge(); //29</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:定义全局对象与在window对象上直接添加属性有区别：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     全局对象不能通过</span><span style="font-family: Courier;">delete操作符删除，该操作符只可以删除属性值。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">问题1：</span><span style="font-family: Courier;">delete操作符为什么只能删除属性值？</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     window属性有一个configurable的特性，当该特性设置为false时，在window作用域中定义的属性和方法则不可删除，反之可以。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">问题2：如何查看</span><span style="font-family: Courier;">window的特性</span><span style="font-family: Courier;">configurable</span><span style="font-family: Courier;">？</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">技巧1:在多人开发的全局作用域中，可以在声明对象之前使用window.方法名，检验一下该方法是否存在，防止覆盖。如果方法未被定义会返回undefine。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(2)窗口关系及框架：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&lt;frame&gt;生成窗口，每一个窗口都有自己的window对象和name</span></span></div>
+<div><span style="font-size: 12px;">当页面有几个 <span style="font-family: Courier;">frame时，都会保存在</span><span style="font-family: Courier;">frames集合里，可以使用</span><span style="font-family: Courier;">frames[索引值]或者</span><span style="font-family: Courier;">frames[name]</span><span style="font-family: Courier;">获取窗口。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">top（始终指向最高层的框架），parent、</span><span style="font-family: Courier;">self</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">问题：最高层窗口是通过window.open()打开的</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(3)窗口的位置</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: TimesNewRoman;">IE<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: TimesNewRoman;">Safari<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: TimesNewRoman;">Opera</span> <span style="font-family: FZSSJW--GB1-0;">、</span><span style="font-family: TimesNewRoman;">Chrome：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">screenLeft</span> </span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">screenTop</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: TimesNewRoman;">Firefox：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">screenX</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">screenY</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">screenX、</span><span style="font-family: Courier;">screenY在chrome中也可以取到。</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: TimesNewRoman;">Firefox<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: TimesNewRoman;">Safari、</span><span style="font-family: TimesNewRoman;">Chrome</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">返回top.screenX和</span><span style="font-family: Courier;">top.screenY</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">将窗口移动到指定的位置</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">moveTo(x，y)</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">moveBy(水平，垂直)参数可为负</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:</span><span style="font-family: TimesNewRoman;">Opera 和</span><span style="font-family: TimesNewRoman;">IE7（及更高版本是禁止的）</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(4)窗口的大小</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: TimesNewRoman;">IE9+<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: TimesNewRoman;">Firefox<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: TimesNewRoman;">Safari<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: TimesNewRoman;">Opera、</span><span style="font-family: TimesNewRoman;">Chrome提供4个属性：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">innerWidth<span style="font-family: FZSSJW--GB1-0;">\</span></span><span style="font-family: Courier;">innerHeight<span style="font-family: FZSSJW--GB1-0;">\</span></span><span style="font-family: Courier;">outerWidth\</span><span style="font-family: Courier;">outerHeight</span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-28%20%E4%B8%8B%E5%8D%8812.10.29.png" height="1058" width="1476"/></span></div>
+<div><span style="font-size: 12px;">&gt;<span style="font-family: Courier;">innerWidth<span style="font-family: FZSSJW--GB1-0;">,</span></span><span style="font-family: Courier;">innerHeight:</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     返回视口大小（页面看的见的viewport的大小（包含body的margin属性值，但是不包含浏览器窗口边框和工具栏的大小））</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&gt;</span><span style="font-family: Courier;">outerWidth\</span><span style="font-family: Courier;">outerHeight:</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     返回浏览器窗口本身的大小包含浏览器窗口边框和工具栏。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&gt;标准模式下：</span></span></div>
+<div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document.documentElement.clientWidth</span></span></div>
+</div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document.documentElement.clientHeight</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     &gt;在移动设备中，随着浏览器的缩放，值也会做相应变化。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     </span><span style="font-family: Courier;">&gt;在移动浏览器中，随着浏览器的缩放，值不变。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">混杂模式下：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document.body.clientWidth,</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">document.body.clientHeight</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     返回视口的大小，不包含margin属性的值。</span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-28%20%E4%B8%8B%E5%8D%8812.14.41.png" height="1058" width="1480"/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&gt;resizeTo(新高度，新宽</span><span style="font-family: Courier;">度</span><span style="font-family: Courier;">)<span style="font-family: FZSSJW--GB1-0;">、</span></span><span style="font-family: Courier;">resizeBy(与旧窗口的差值，</span><span style="font-family: Courier;">与旧窗口的差值</span><span style="font-family: Courier;">)</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     调整浏览器窗口的大小</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:</span><span style="font-family: TimesNewRoman;">Opera 和</span><span style="font-family: TimesNewRoman;">IE7（及更高版本是禁止的）</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: TimesNewRoman;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(5)导航和打开窗口</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">使用window.open(加载的URL，窗口目标，特性字符串，是否取代当前页面的布尔值)</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(5)系统对话框</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&gt; alert()</span><span style="font-family: FZSSJW--GB1-0;">􏲀</span><span style="font-family: Courier;">confirm()</span><span style="font-family: FZSSJW--GB1-0;">􏰧</span> <span style="font-family: Courier;">prompt()显示的样式是根据操作系统和浏览器决定，而不是由css决定。显示弹框，代码执行暂停，关闭回复执行。</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&gt;find()</span><span style="font-family: Courier;">print()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">2、location对象：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">window.location、</span> <span style="font-family: Courier;">document.location引用的是同一个对象，因为这个对象是window和location共同的属性。</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">&gt;查询字符串：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier; vertical-align: 2pt;">hash url中#后面跟的字符</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">host 服务器名或者端口号</span></span></div>
+<div><span style="font-size: 12px;">hostName     不带端口号的服务器名l</span></div>
+<div><span style="font-size: 12px;">href     加载页面的完整url（localtion.toString也返回该值）</span></div>
+<div><span style="font-size: 12px;">pathname        url的请求路径  </span></div>
+<div><span style="font-size: 12px;">port     端口号</span></div>
+<div><span style="font-size: 12px;">protocol     页面使用协议</span></div>
+<div><span style="font-size: 12px;">search     返回查询字符串，以？开头的字符串</span></div>
+<div><span style="font-size: 12px;">oringin  只读属性</span></div>
+<div><span style="font-size: 12px;">示例：</span></div>
+<div><span style="font-size: 12px;">url：<span style="color: rgb(34, 34, 34); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none;">"<a href="https://www.google.com.hk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=%E6%B7%BB%E5%8A%A0%E5%85%AC%E6%B4%9E%E4%BA%8B%E4%BB%B6">https://www.google.com.hk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=%E6%B7%BB%E5%8A%A0%E5%85%AC%E6%B4%9E%E4%BA%8B%E4%BB%B6</a>"</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-08-28%20%E4%B8%8B%E5%8D%885.39.45.png" height="262" width="1034"/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">&gt;位置操作方法：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">location.assign</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">location.href</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">window.location</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">三个方法设置一个url,重定向到新的地址。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&gt;后两个方法值重定向的时候会为url值调用</span><span style="font-family: Courier;">assign()方法。</span></span></div>
+<div><span style="font-size: 12px;">&gt;每次修改localtion的属性页面会重新载入url，但是修改hash则不会载入</span></div>
+<div><span style="font-size: 12px;">&gt;使用上面的属性修改url，每次浏览器会在url载入的时候添加一条新的历史记录。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">location.assign     </span><span style="font-family: Courier;">替换的url保存在历史历史记录中</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">location.reload     重新载入页面，不传参数，就会从缓存中加载，如果缓存中没有，传递</span><span style="font-family: Courier;">参数true，从服务器重新加载。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">location.replace     使用该方法替换的url不保存在历史历史记录中</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">3、navigator对象：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">获取客户端浏览器的详细信息</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">4、screen对象：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">保存着与客户端显示器有关的信息。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">5、history对象：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">history对象是window的对象，每一个框架和标签都有自己的历史记录</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">back()</span><span style="font-family: FZSSJW--GB1-0;">、</span><span style="font-family: Courier;">forward()模拟浏览器中的前进和后退按钮</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">go()，参数为负数表示后退，参数为整数表示前进.</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">length:表示历史记录的条数。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">第十三章：事件</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">1、事件流</span></div>
+<div><span style="font-size: 12px;">事件流：页面接收事件的顺序</span></div>
+<div><span style="font-size: 12px;">     IE:事件冒泡</span></div>
+<div><span style="font-size: 12px;">     网景：事件捕获</span></div>
+<ul>
+<li><span style="font-size: 12px;">冒泡（bubbling）：先子后父；</span></li>
+<li><span style="font-size: 12px;">捕捉（capturing）：先父后子；</span></li>
+</ul>
+<div><span style="font-size: 12px;">(1)事件冒泡：</span></div>
+<div><span style="font-size: 12px;">     文档层次嵌套最深的节点开始，逐级向上传递。移植到document对象。</span></div>
+<div><span style="font-size: 12px;">(2)事件捕获：</span></div>
+<div><span style="font-size: 12px;">     从文档节点的外层想里层传递，在到达目标之前就接收到事件。</span></div>
+<div><span style="font-size: 12px;">(3)DOM事件流：</span></div>
+<div><span style="font-size: 12px;">     DOM2级事件事件流三部分：捕获阶段、处于目标阶段、冒泡阶段</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">2、事件处理程序：</span></div>
+<div><span style="font-size: 12px;">(1)HTML事件处理程序：</span></div>
+<div><span style="font-size: 12px;">每个元素支持的事件都可以在html特性中表示，该特性的值是可以执行的js代码。js不能直接写未经转义的HTML语法字符串，比如&amp;、“”、&lt;,&gt;,使用之前那需要进行转义。</span></div>
+<div><span style="font-size: 12px;">示例：</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><font face="Courier"> &lt;input type="button" value="Click Me" onclick=</font><font face="Courier">“</font><font face="Courier">alert(‘hello world!')" /&gt;</font></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">&lt;input type="button" value="Click Me" onclick="showMessage()" /&gt;</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:showMessage函数自带了event事件对象，在该函数里面，this = 事件的目标元素。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:在这个里面定义的js作用域为全局作用域（如果全局作用域没有该方法就报错，比如在。）</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:如果在js没有加载完就点击事件会报错，处理方式是try{</span><span style="font-family: Courier;">showMessage()</span><span style="font-family: Courier;">}cache(){},在处理错误之前就捕获错误。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(2)DOM0级事件：</span></div>
+<div><span style="font-size: 12px;">在事件流冒泡阶段执行。</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">var btn = document.getElementById("myBtn");</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">    btn.onclick = function(){</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">        alert("Clicked");</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">    };</span></span></div>
+<div><span style="font-size: 12px;">(3)DOM2级事件：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">addEventListener()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">removeEventListener()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">参数：事件名称，事件处理函数，布尔值（事件流方式，true：</span><span style="font-family: Courier;">捕获</span><span style="font-family: Courier;">，false：</span><span style="font-family: Courier;">冒泡</span><span style="font-family: Courier;">）</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:同一个元素绑定多个</span><span style="font-family: Courier;">addEventListener事件会按顺序执行。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">(4)IE事件处理事件：</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">attachEvent()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">detachEvent()</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">参数：事件处理名称（ps:带on），事件处理函数</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">ps:同一个元素绑定多个</span><span style="font-family: Courier;">attachEvent</span><span style="font-family: Courier;">事件不按顺序执行。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">3、事件对象：</span></div>
+<div><span style="font-size: 12px;">触发DOM上的事件给事件传一个event对象，该对象中包括事件的所有信息。只在事件发生的过程有效。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">(1)打印鼠标事件的对象：</span></div>
+<div><span style="font-size: 12px;"><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-09-02%20%E4%B8%8A%E5%8D%8810.20.57.png" height="1200" width="1568"/></span></div>
+<div><span style="font-size: 12px;">Event属性和方法：</span></div>
+<div><span style="font-size: 12px;"><b>1、altKey</b>：检查alt键的状态。</span></div>
+<div><span style="font-size: 12px;">语法：event.altKey</span></div>
+<div><span style="font-size: 12px;">可能的值：当alt键按下时，值为 true ，否则为 false 。只读。</span></div>
+<div><span style="font-size: 12px;"><b>2、button</b>：检查按下的鼠标键。</span></div>
+<div><span style="font-size: 12px;">语法：event.button</span></div>
+<div><span style="font-size: 12px;">可能的值：</span></div>
+<ul>
+<li><span style="font-size: 12px;">0 没按键</span></li>
+<li><span style="font-size: 12px;">1 按左键</span></li>
+<li><span style="font-size: 12px;">2 按右键</span></li>
+<li><span style="font-size: 12px;">3 按左右键</span></li>
+<li><span style="font-size: 12px;">4 按中间键</span></li>
+<li><span style="font-size: 12px;">5 按左键和中间键</span></li>
+<li><span style="font-size: 12px;">6 按右键和中间键</span></li>
+<li><span style="font-size: 12px;">7 按所有的键</span></li>
+</ul>
+<div><span style="font-size: 12px;">这个属性仅用于onmousedown, onmouseup, 和 onmousemove 事件，其他事件统一返回0.</span></div>
+<div><span style="font-size: 12px;"><strong>3、cancelBubble</strong>：是否取消冒泡，部分浏览器废弃，用<a href="https://developer.mozilla.org/zh-cn/DOM/event.stopPropagation" title="zh-cn/DOM/event.stopPropagation" style="padding: 0px; border: 0px; color: rgb(0, 149, 221); text-decoration: none; font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">stopPropagation()</a>代替<span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(250, 215, 212);"> </span>。</span></div>
+<div><span style="font-size: 12px;">event.cancelable为true则阻止默认行为。</span></div>
+<div><span style="font-size: 12px;">语法：event.cancelBubble[ = cancelBubble]</span></div>
+<div><span style="font-size: 12px;">可能的值：这是一个可读写的布尔值:</span></div>
+<div><span style="font-size: 12px;">     true 不被上层原素的事件控制。</span></div>
+<div><span style="font-size: 12px;">     flase 允许被上层元素的事件控制(默认值)</span></div>
+<div><span style="font-size: 12px;"><strong>4、cancelBubble：事件是否取消</strong></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">取消一个事件的默认动作,可以调用该事件的 </span><code style="padding: 0px; border: 0px; font-style: normal; font-weight: normal; font-family: Consolas, 'Liberation Mono', Courier, monospace; word-wrap: break-word; color: rgb(77, 78, 83); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><a href="https://developer.mozilla.org/zh-cn/DOM/event.preventDefault" title="zh-cn/DOM/event.preventDefault" style=" padding: 0px; border: 0px; color: rgb(0, 149, 221); text-decoration: none;">preventDefault()</a></code><span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">方法.</span></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(77, 78, 83); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">5、<b>target</b>：返回触发事件的元素。</span></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(77, 78, 83); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; float: none; background-color: rgb(255, 255, 255);">6、<b>currentTarget</b>：返回绑定事件的元素</span></span></div>
+<div><span style="font-size: 12px;"><strong>4、clientX</strong>：返回鼠标在窗口客户区域中的X坐标。</span></div>
+<div><span style="font-size: 12px;">语法：event.clientX(只读)</span></div>
+<div><span style="font-size: 12px;"><b>5、clientY</b>：返回鼠标在窗口客户区域中的Y坐标。</span></div>
+<div><span style="font-size: 12px;">语法：event.clientY(只读)</span></div>
+<div><span style="font-size: 12px;"><b>6、ctrlKey</b>：检查ctrl键的状态。</span></div>
+<div><span style="font-size: 12px;">语法：event.ctrlKey</span></div>
+<div><span style="font-size: 12px;">可能的值：当ctrl键按下时，值为 true ，否则为 false 。只读。</span></div>
+<div><span style="font-size: 12px;"><b>7、fromElement</b>：检测 onmouseover 和 onmouseout 事件发生时，鼠标所离开的元</span></div>
+<div><span style="font-size: 12px;">语法：event.fromElement(只读)</span></div>
+<div><span style="font-size: 12px;"><b>8、keyCode</b>：检测键盘事件相对应的数字值( onkeydown, onkeyup, 和 onkeypress 事件)</span></div>
+<div><span style="font-size: 12px;">语法：event.keyCode[ = keyCode]</span></div>
+<div><span style="font-size: 12px;">可能的值：Unicode键盘(可读写)默认为0.</span></div>
+<div><span style="font-size: 12px;"><b>9、offsetX</b>：检查相对于触发事件的对象，鼠标位置的水平坐标</span></div>
+<div><span style="font-size: 12px;">语法：event.offsetX</span></div>
+<div><span style="font-size: 12px;"><b>10、offsetY</b>：检查相对于触发事件的对象，鼠标位置的垂直坐标</span></div>
+<div><span style="font-size: 12px;">语法：event.offsetY</span></div>
+<div><span style="font-size: 12px;"><b>11、propertyName</b>：设置或返回元素的变化了的属性的名称。</span></div>
+<div><span style="font-size: 12px;">语法：event.propertyName [ = sProperty ]</span></div>
+<div><span style="font-size: 12px;">可能的值：sProperty 是一个字符串，指定或返回触发事件的元素在事件中变化了的属性的名称。(可读写)。无默认值。触发onpropertychange 事件获得该值</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><b>12、returnValue</b>：设置或检查从事件中返回的值</span></div>
+<div><span style="font-size: 12px;">语法：event.returnValue[ = Boolean]</span></div>
+<div>
+<p><span style="font-size: 12px;">可能的值：<br/>
+true 事件中的值被返回<br/>
+false 源对象上事件的默认操作被取消</span></p>
+</div>
+<div><span style="font-size: 12px;"><b>13、screenX</b>：检测鼠标相对于用户屏幕的水平位置</span></div>
+<div><span style="font-size: 12px;">语法：event.screenX（只读属性）</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><b>14、screenY</b>：检测鼠标相对于用户屏幕的垂直位置</span></div>
+<div><span style="font-size: 12px;">语法：event.screenY（只读属性）</span></div>
+<div><span style="font-size: 12px;"><b>15、shiftKey</b>：检查shift键的状态。</span></div>
+<div><span style="font-size: 12px;">语法：event.shiftKey</span></div>
+<div><span style="font-size: 12px;">可能的值：当shift键按下时，值为 TRUE ，否则为 FALSE 。只读。</span></div>
+<div><span style="font-size: 12px;"><b>16、srcElement</b>：返回触发事件的元素。只读。例子见本文开头。</span></div>
+<div><span style="font-size: 12px;">语法：event.srcElement</span></div>
+<div><span style="font-size: 12px;"><b>17、srcFilter</b>：返回触发 onfilterchange 事件的滤镜。只读。</span></div>
+<div><span style="font-size: 12px;">语法：event.srcFilter</span></div>
+<div><span style="font-size: 12px;"><b>18、toElement</b>：检测 onmouseover 和 onmouseout 事件发生时，鼠标所进入的元素。 语法：event.toElement（只读属性）</span></div>
+<div><span style="font-size: 12px;"><b>19.type</b>：返回事件名。</span></div>
+<div><span style="font-size: 12px;">语法：event.type（只读）</span></div>
+<div><span style="font-size: 12px;">注释：返回没有“on”作为前缀的事件名</span></div>
+<div><span style="font-size: 12px;"><b>20. x/y</b>：返回鼠标相对于css属性中有position属性的上级元素的x/y轴坐标。如果没有css属性中有position属性的上级元素，默认以body元素作为参考对象。</span></div>
+<div><span style="font-size: 12px;">语法：event.x（只读属性）</span></div>
+<div><span style="font-size: 12px;">注释：如果事件触发后，鼠标移出窗口外，则返回的值为 -1</span></div>
+<div><span style="font-size: 12px;">21：isPropagationStopped() 方法检查指定的事件上是否调用了 <a href="http://www.runoob.com/jquery/event-stoppropagation.html">event.stopPropagation()</a>。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">(2) touchEvent对象：</span></div>
+<div><span style="font-size: 12px;">包含了对手势判断的属性：</span></div>
+<ul>
+<li><span style="font-size: 12px;">touches：表示当前跟踪的触摸操作的touch对象的数组。<br/>
+当一个手指在触屏上时，<code>event.touches.length=1</code>,<br/>
+当两个手指在触屏上时，<code>event.touches.length=2</code>，以此类推。</span></li>
+<li><span style="font-size: 12px;">targetTouches：绑定事件的那个结点上的触摸点的集合列表。<br/>
+因为touch事件是会冒泡的，所以利用这个属性指出目标对象。</span></li>
+</ul>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">在移动端事件用touch事件，因为click点击事件是针对pc设计的，所以点击后悔等待第二次点击的发生，这个会导致在移动端有300ms的延迟，所以在移动端使用touch事件  </span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">4.事件类型：</span></div>
+<div><span style="font-size: 12px;">(1)UI事件:</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">load:当页面所有资源完全加载完才执行。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">unload：跳出页面的时候触发</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">abort：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">error：js加载报错触发</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">select：选择文本触发</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">resize：窗口和框架大小改变</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">scroll：元素有滚动条滚动触发</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     通过</span><span style="font-family: Courier;">scrollLeft，</span><span style="font-family: Courier;">scrollTop</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">使用</span><span style="font-family: Courier;">document.implementation.hasFeature("HTMLEvents", "2.0")方法检测浏览器对事件的支持情况。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">比较1：</span><span style="font-family: Courier;">和jquery的ready()方法的区别是：ready当加载完dom结构就触发。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">5、内存和性能：</span></div>
+<div><span style="font-size: 12px;">（1）事件委托：利用冒泡原理，只指定一个事件处理程序处理该类型的所有事件，</span></div>
+<div><span style="font-size: 12px;">优点：</span></div>
+<div><span style="font-size: 12px;">不用给每个元素重复定义同一事件类型(选项卡)</span></div>
+<div><span style="font-size: 12px;">document对象可以快速访问</span></div>
+<div><span style="font-size: 12px;">页面设置事件处理程序花时减少</span></div>
+<div><span style="font-size: 12px;">内存空间减少</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">6、模拟事件：</span></div>
+<div><span style="font-size: 12px;">DOM中的事件模拟：</span></div>
+<div><span style="font-size: 12px;">（1）创建事件：</span></div>
+<div><span style="font-size: 12px;">在document对象上用<span style="font-family: Courier;">createEvent（para）创建对象</span></span></div>
+<div><span style="font-size: 12px;">参数<span style="font-family: Courier;">para：表示事件类型的字符串。</span></span></div>
+<div><span style="font-size: 12px;"><font face="Courier">事件类型有：</font></span></div>
+<ul style="list-style-type: none">
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">UIEvents</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">MouseEvents</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">MutationEvents</span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">HTMLEvents</span></span></li>
+</ul>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">（2）触发事件：</span></span></div>
+<ol start="0" style="list-style-type: none">
+<li><span style="font-size: 12px;"><span style="font-family: Courier;">dispatchEvent（para）</span></span></li>
+</ol>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">参数：para:表示触发事件的event对象</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;">示例：</span></div>
+<div><span style="font-size: 12px;">// 创建<span style="font-family: Courier;">事件对象</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">//</span><span style="font-family: Courier;">初始化</span></span></div>
+<div><span style="font-size: 12px;">// 触发</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">var event = document.createEvent("MouseEvents");</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">event.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0,</span> <span style="font-family: Courier;">false, false, false, false, 0, null);</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">btn.dispatchEvent(event);</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">键盘模拟事件：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">创建（初始化以后会给事件对象返回一个初始化initKeyEvent方法，包含键盘的一些属性）</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">触发</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">添加：</span></span></div>
+<div><span style="font-size: 12px;">事件的添加兼容IE浏览器，</span></div>
+<ul style="list-style-type: none">
+<li><span style="font-size: 12px;"><br/></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></li>
+<li><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></li>
+</ul>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">第九章：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">检测规则：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">1、同一作用的方法，先检测常用的，后检测不常用，</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">第十七章：</span></span></div>
+<div>
+<div align="left" style="text-align:left;mso-pagination:widow-orphan"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">1</span><span style="font-family: SimSun; color: black;">、浏览器：</span></span></div>
+</div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">（<span lang="EN-US" xml:lang="EN-US">1</span>）<span lang="EN-US" xml:lang="EN-US">IE</span>：左下角黄色图标</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">（<span lang="EN-US" xml:lang="EN-US">2</span>）<span lang="EN-US" xml:lang="EN-US">firefox</span>：打印错误到控制台，每一行后面错误代码的行号，点击行号跳转到错误代码所在文件的位置。</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">（<span lang="EN-US" xml:lang="EN-US">3</span>）<span lang="EN-US" xml:lang="EN-US">Safari:</span></span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">（<span lang="EN-US" xml:lang="EN-US">4</span>）<span lang="EN-US" xml:lang="EN-US">opera:</span></span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">（<span lang="EN-US" xml:lang="EN-US">5</span>）<span lang="EN-US" xml:lang="EN-US">chrome</span>：</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">共同点：</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">默认情况下都会隐藏<span lang="EN-US" xml:lang="EN-US">js</span>错误，该错误会被记录在控制台中，如果想要查看错误信息需要打开控制台进行查看。</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">打印错误和警告到控制台<span lang="EN-US" xml:lang="EN-US">,</span>每一行后面错误代码的行号，点击行号跳转到错误代码所在文件的位置。</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;"><span style="font-size: 12px;"><span style="font-family: SimSun;">  </span></span></div>
+<div>
+<div align="left" style="text-align:left;mso-pagination:widow-orphan"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">3</span><span style="font-family: SimSun; color: black;">、错误事件<span lang="EN-US" xml:lang="EN-US">error</span>：</span></span></div>
+</div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">&gt;</span> <span style="font-family: SimSun; color: black;">兼容：（<span lang="EN-US" xml:lang="EN-US">oprea</span>和<span lang="EN-US" xml:lang="EN-US">safari</span>不支持<span lang="EN-US" xml:lang="EN-US">onerror</span>事件）</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">&gt;</span> <span style="font-family: SimSun; color: black;">没有通过<span lang="EN-US" xml:lang="EN-US">try-catch</span> 处理的的错误会触发<span lang="EN-US" xml:lang="EN-US">window</span>的<span lang="EN-US" xml:lang="EN-US">error</span>事件。</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">&gt; window</span><span style="font-family: SimSun; color: black;">的<span lang="EN-US" xml:lang="EN-US">onerror</span>事件不创建<span lang="EN-US" xml:lang="EN-US">event</span>对象，但是传递三个参数：错误信息、错误所在<span lang="EN-US" xml:lang="EN-US">url(</span>文档的位置<span lang="EN-US" xml:lang="EN-US">)</span>、错误所在行号<span lang="EN-US" xml:lang="EN-US">.</span></span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">&gt;Image</span><span style="font-family: SimSun; color: black;">对象支持<span lang="EN-US" xml:lang="EN-US">error</span>事件，当访问的<span lang="EN-US" xml:lang="EN-US">src</span>找不到就会抛出错误。（发生该事件的时候图片已经下载完，不再重新下载）</span></span></div>
+<div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">4</span><span style="font-family: SimSun; color: black;">、处理错误的策略：</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;"><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: black;" xml:lang="EN-US">(1)</span> <span style="font-family: SimSun; color: black;">常见错误类型：</span></span></div>
+</div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">类型转化错误：场景：<span lang="EN-US" xml:lang="EN-US">==</span>和<span lang="EN-US" xml:lang="EN-US">=</span>！<span lang="EN-US" xml:lang="EN-US">(</span>会强制转化类型进行比较<span lang="EN-US" xml:lang="EN-US">)</span>（所以建议使用<span lang="EN-US" xml:lang="EN-US">===</span>和！<span lang="EN-US" xml:lang="EN-US">==</span>），<span lang="EN-US" xml:lang="EN-US">if</span>、<span lang="EN-US" xml:lang="EN-US">form</span>、<span lang="EN-US" xml:lang="EN-US">while</span>判断语句不是标准的<span lang="EN-US" xml:lang="EN-US">boolean</span>值（<span lang="EN-US" xml:lang="EN-US">ps:</span>恰当的类型比较。）</span></span></div>
+<div align="left" style="text-align:left;mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: rgb(51, 51, 51); background-color: white; background-position: initial initial; background-repeat: initial initial;">数据类型错误：使用数据类型检测操作符（<span lang="EN-US" xml:lang="EN-US"> typeof</span>检测基本类型的值，<span lang="EN-US" xml:lang="EN-US"> instanceof</span>检测对象的值</span><span style="font-family: SimSun; color: rgb(51, 51, 51); background-color: white; background-position: initial initial; background-repeat: initial initial;">）</span></span></div>
+<div style="background:white;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: rgb(51, 51, 51);">通信错误：</span></span></div>
+<div>
+<div style="background:white;font-variant-ligatures: normal; font-variant-caps: normal;orphans: 2;widows: 2;-webkit-text-stroke-width: 0px; word-spacing:0px;margin-left:40px;">
+<div><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun; color: rgb(51, 51, 51);" xml:lang="EN-US">url</span><span style="font-family: SimSun; color: rgb(51, 51, 51);">错误和<span lang="EN-US" xml:lang="EN-US">url</span>编码错误。</span></span></div>
+</div>
+<div style="background:white;font-variant-ligatures: normal; font-variant-caps: normal;orphans: 2;widows: 2;-webkit-text-stroke-width: 0px; word-spacing:0px;">
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: rgb(51, 51, 51);">数据错误</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">2、错误处理：</span></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">（1）try-catch:</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);"> try{</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">// 有可能会发生错误的代码</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">} catch(error){</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">// 错误处理</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">}</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">示例：</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);"> </span>try {</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;">window.someUndefineFunction();</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;">} catch (error){</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;">console.log("An error happened!");</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;">console.log(error);</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;">}</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">控制台打印：</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">各浏览器给error对象添加的属性：(共同支持message属性。)</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">&gt;IE:添加了description（和message属性一样） 、number (内部错误条数)</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">&gt;fixfox：fileName、lineNumber、stack </span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">&gt;Safari :line (行号)、sourceId(内部错误代码)、sourceURL </span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><br/></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">&gt;chrome:</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><a href="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/74581D92-EF0E-4416-9927-9F148DD4B56D.pdf">74581D92-EF0E-4416-9927-9F148DD4B56D.pdf</a></span></div>
+<div>
+<p style=""/>
+<p style=""><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">（2）finally语句：</span></span></p>
+<p style=""><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">无论代码执行try还是cache语句块，最后都会执行finally语句。</span></span></p>
+<table style="background-color: rgb(240, 240, 240); background-position: 0px 0px; background-repeat: no-repeat; border: 1px solid rgb(221, 221, 221); padding: 24px 2px 2px; border-collapse: separate; cursor: move; background-image: url(&quot;/plugins/servlet/confluence/placeholder/macro-heading?definition=e2NvZGU6bGFuZ3VhZ2U9anN8bGluZW51bWJlcnM9dHJ1ZX0&amp;locale=zh_CN&amp;version=2&quot;);width:235px;">
+<tr>
+<td style="white-space: pre-wrap; background-color: rgb(255, 255, 255); border: 1px solid rgb(221, 221, 221); padding: 10px; cursor: text;width:81.27659574468085%;">
+<pre style=" tab-size: 4; white-space: pre-wrap;">
+<span style="font-size: 12px;">
+function testFinally(){ 
+        try { 
+                return 2; 
+        } catch (error){ 
+                return 1; 
+        } finally { 
+                return 0; 
+        }
+}
+
+
+
+
+</span>
+</pre></td>
+</tr>
+</table>
+</div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">ps:IE7及其之前版本有一个bug,除非执行catch语句，否则就不执行finally语句。</span><span style="color: rgb(0, 0, 0);"> </span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">3、抛出错误：</span></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);">throw语句：</span></span></div>
+<div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">抛出错误时只需给<span lang="EN-US" xml:lang="EN-US">throw</span>操作符指定一个值（无类型限制）。</span></span></div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">当代码执行遇到<span lang="EN-US" xml:lang="EN-US">throw</span>之后代码立即停止，直到<span lang="EN-US" xml:lang="EN-US">try</span>语句捕获被抛出的值。</span></span></div>
+</div>
+<div align="left" style="text-align:left; mso-pagination:widow-orphan;margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: SimSun; color: black;">利用原型链可以通过继承<span lang="EN-US" xml:lang="EN-US">Error</span>来创建自定义的错误类型。</span></span></div>
+<div><span style="font-size: 12px;"><a href="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/E570CF53-259D-4588-98FC-BE489C0710A5.pdf">E570CF53-259D-4588-98FC-BE489C0710A5.pdf</a></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">4、错误类型：</span></div>
+<div>
+<div><span style="font-size: 12px;">      EvalError        eval函数没有被正确执行时。</span></div>
+<div><span style="font-size: 12px;">      RangeError      一是数组长度为负数，二是Number对象的方法参数超出范围，以及函数堆栈超过最大值。</span></div>
+<div><span style="font-size: 12px;">      ReferenceError     引用错误，对象表明一个不存在的变量被引用。</span></div>
+<div><span style="font-size: 12px;">      SyntaxError          语法错误</span></div>
+<div><span style="font-size: 12px;">      TypeError       对字符串、布尔值、数值等原始类型的值使用new命令，就会抛出这种错误，因为new命令的参数应该是一个构造函数</span></div>
+<div><span style="font-size: 12px;">      URIErrorurl         只有在调用这几种方式时url格式不正确，encodeURI()、decodeURI()、encodeURIComponent()、decodeURIComponent()、escape()和unescape() ，才会报错</span></div>
+</div>
+<div><span style="font-size: 12px;"><span style="color: rgb(51, 51, 51);"><span style="font-family: Arial, sans-serif;"><br/></span></span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div>
+<div style="font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="font-size: 12px;"><span style="font-family: Arial, sans-serif;"><span style="color: rgb(51, 51, 51);">5、调试技术：</span></span></span></div>
+</div>
+</div>
+<div>
+<div style="font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="font-size: 12px;"><span style="font-family: Arial, sans-serif;"><span style="color: rgb(51, 51, 51);">（1）console打印到控制台：</span></span></span></div>
+</div>
+</div>
+<div>
+<div style="font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Arial, sans-serif;"><span style="color: rgb(51, 51, 51);"> error()错误消息  </span></span></span></div>
+</div>
+</div>
+<div style="margin-left:40px;">
+<div style="font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="font-size: 12px;"><span style="font-family: Arial, sans-serif;"><span style="color: rgb(51, 51, 51);"> log()一般消息</span></span></span></div>
+</div>
+</div>
+<div style="margin-left:40px;">
+<div style="font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="font-size: 12px;"><span style="font-family: Arial, sans-serif;"><span style="color: rgb(51, 51, 51);"> info()消息性消息 </span></span></span></div>
+</div>
+</div>
+<div>
+<div style="color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div style="margin-left:40px;"><span style="font-size: 12px;"> warn()警告</span></div>
+</div>
+</div>
+<div><span style="font-size: 12px;"><span style="color: rgb(51, 51, 51);"><span style="font-family: Arial, sans-serif;">（2）throw error抛出错误。</span></span></span></div>
+<div>
+<p style="color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><span style="font-size: 12px;">（3）自定义函数将错误信息插入到页面。</span></p>
+<p style="color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><span style="font-size: 12px;"><br/></span></p>
+<p style="color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><span style="font-size: 12px;"><br/></span></p>
+<p style="color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><span style="font-size: 12px;"><br/></span></p>
+<p style="color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0);"> </span></span></p>
+</div>
+<div><span style="font-size: 12px;"><br/></span></div>
+</div>
+</div>
+<div style="background:white;"><span style="font-size: 12px;"><span style="font-family: SimSun;"><span style="color: rgb(51, 51, 51);">参考文档：</span></span><a href="https://msdn.microsoft.com/zh-cn/library/dww52sbt(v=vs.94).aspx">https://msdn.microsoft.com/zh-cn/library/dww52sbt(v=vs.94).aspx</a></span></div>
+<div><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun;" xml:lang="EN-US"> </span></span></div>
+<div><span style="font-size: 12px;"><span lang="EN-US" style="font-family: SimSun;" xml:lang="EN-US"> 第20章json</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">一、语法：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">js字符串和json字符串区别：json字符串需要使用“”双引号。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">1、对象：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">json对象和js字面量对象区别:</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">（1）</span><span style="font-family: SimSun;">json</span><span style="font-family: SimSun;">属性名一定只能用双引号，单引号容易出错。</span></span></div>
+<div><span style="font-size: 12px;"><font face="SimSun">（2）json对象结尾不用加封号，js需要加’；’。</font></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">相同特性：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">（1）属性值可以是简单值或者复杂值。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">（2）以键值对方式存储。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">2、数组：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">数组的每一项包含一个json对象，每一个对象都有各自的属性，这些属性之间互不影响，也就是说同名也没有关系。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">try {</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">      window.someUndefineFunction();</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">} catch (error){</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">      console.log("An error happened!");</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">      console.log(error);</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">      console.log(error.stack);</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">}</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">二、解析：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">     json解析为js对象数据结构。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;">1、json对象方法<span style="font-family: Courier;">：</span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">（1） stringify(</span><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">value</em>[, <em style="padding: 0px; border: 0px;">replacer</em> [, <em style="padding: 0px; border: 0px;">space</em>]]</code><span style="font-family: Courier;">) </span><span style="font-family: Courier;">用于把js对象序列化成JSON字符串</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          &gt;</span><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">value：要序列化的js对象字符串。</em></code></span></div>
+<div><span style="font-size: 12px;"><i>                  &gt;</i><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">replacer(para1[,</em></code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">para2</em></code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">]</em></code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">)：</em></code></span></div>
+<div><span style="font-size: 12px;"><i>                     该</i><i>参数为函数:</i><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">para1和</em></code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">para2为</em></code></span></div>
+<div><span style="font-size: 12px;"><i>                              参数1和2代表的是json对象中的key和value。<br/></i></span></div>
+<div><span style="font-size: 12px;"><i>                     该参数为数组：<br/></i></span></div>
+<div><span style="font-size: 12px;"><i>                     (1) 数组：包含在该数组的属性名才会被序列化到json字符串中，数组中属性位置决定序列化json对象中的位置</i></span></div>
+<div><span style="font-size: 12px;"><i>                     (2) null或者未提供，所有属性都会被解析</i></span></div>
+<div><span style="font-size: 12px;"><i>                      </i><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-09-06%20%E4%B8%8B%E5%8D%883.46.22.png" height="230" width="1384"/></span></div>
+<div><span style="font-size: 12px;"><i>                  &gt;</i><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: inherit;"><em style="padding: 0px; border: 0px;">space：用来控制结果字符串里面的间距</em></code><i>    </i></span></div>
+<div><span style="font-size: 12px;"><i>                              数字：代表多少空格，上线为10，值小于1，则没有空格。每一级别会比上一级别多缩进这个数字值的空格。</i></span></div>
+<div><span style="font-size: 12px;"><i>                              字符串：该字符串就会被作为空格。</i><i>每一级别会比上一级别多缩进该字符串。</i></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">                </span> <i>null或者不提供：没有空格。</i></span></div>
+<div><span style="font-size: 12px;"><i>                   </i><img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-09-06%20%E4%B8%8B%E5%8D%883.45.36.png" height="794" width="1208"/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">（2）</span><span style="font-family: Courier;">parse(JSONString[,reviver]) 用于把JSON字符串解析为原生js值。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          </span><span style="font-family: Courier;">JSONString:</span><span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">要解析的 JSON 字符串</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          </span><span style="font-family: Courier;">reviver:用来转化解析出的属性值的函数,会在每一个键值对上调用,有两个参数key.。</span></span></div>
+<div><span style="font-size: 12px;">                    <img src="js%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A02016.08.19%EF%BC%9A.resources/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-09-06%20%E4%B8%8B%E5%8D%883.24.31.png" height="1204" width="1610"/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: SimSun;"><br/></span></span></div>
+<div><span style="font-size: 12px;">（3）toJSON();</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">第九章能力检测：</span></div>
+<div><span style="font-size: 12px;">1、能力检测：</span></div>
+<div><span style="font-size: 12px;">确定浏览器支持的特点能力。</span></div>
+<div><span style="font-size: 12px;">（1）模式：</span></div>
+<div><span style="font-size: 12px;">if(判断某个方法是否存在){</span></div>
+<div><span style="font-size: 12px;">     使用该方法；</span></div>
+<div><span style="font-size: 12px;">}else{</span></div>
+<div><span style="font-size: 12px;">     使用适合该浏览器的方法；</span></div>
+<div><span style="font-size: 12px;">}</span></div>
+<div><span style="font-size: 12px;">（2）规则：检测常用的特性，避免检测更多条件。</span></div>
+<div><span style="font-size: 12px;">                    能力检测不代表浏览器检测。</span></div>
+<div><span style="font-size: 12px;">2、怪癖检测：</span></div>
+<div><span style="font-size: 12px;">检测浏览器存在的bug</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Enumerable_attribute">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty#Enumerable_attribute</a></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">二十一章：ajax以及跨域请求</span></div>
+<div><span style="font-size: 12px;">AJAX （<span style="color: rgb(51, 51, 51); font-family: 'Microsoft YaHei', Verdana, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">Asynchronous JavaScript + XML</span>  ）       </span></div>
+<div><span style="font-size: 12px;"><em style="color: rgb(221, 75, 57); font-style: normal; font-weight: normal; font-family: arial, sans-serif; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">XML</em><span style="color: rgb(84, 84, 84); font-family: arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;"> 被设计用来传输和存储数据</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(84, 84, 84);">html 是用来展示数据的</span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(84, 84, 84);"><br/></span></span></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(84, 84, 84);">1、</span></span></span>XMLHttpRequest 对象</span></div>
+<div>
+<div><span style="font-size: 12px;"><span style="color: rgb(0, 0, 0); font-family: Verdana, Arial, 宋体; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(249, 249, 249); float: none;">用于在后台与服务器交换数据：</span></span></div>
+<div><span style="font-size: 12px;"><font face="Verdana, Arial, 宋体"><span style="background-color: rgb(249, 249, 249);">特点：</span></font></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">在不重新加载页面的情况下更新网页</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">在页面已加载后从服务器请求数据</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">在页面已加载后从服务器接收数据</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">在后台向服务器发送数据</span></div>
+</div>
+<div><span style="font-size: 12px;">属性：</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">（1）IE7之前XHR对象是由<span style="font-family: TimesNewRoman;">ActiveX对象实现</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(84, 84, 84);">2、</span></span></span>XMLHttpRequest 2对象</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">3、进度事件:</span></div>
+<div><span style="font-size: 12px;">loadstart:</span></div>
+<div><span style="font-size: 12px;">progress:</span></div>
+<div><span style="font-size: 12px;">error:</span></div>
+<div><span style="font-size: 12px;">abort:</span></div>
+<div><span style="font-size: 12px;">load</span></div>
+<div><span style="font-size: 12px;">loadend</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">第二十三章 离线应用与客户端存储</span></div>
+<div><span style="font-size: 12px;">1、离线检测</span></div>
+<div><span style="font-size: 12px;">（1）navigator.onLine  布尔值</span></div>
+<div><span style="font-size: 12px;">          ps:不同浏览器存在兼容性的问题</span></div>
+<div><span style="font-size: 12px;">支持：IE7之前、chrome11之后的版本。。。</span></div>
+<div><span style="font-size: 12px;">（2）h5为window对象定义的事件 online和offline</span></div>
+<div><span style="font-size: 12px;">支持：<span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">IE6+（只支持</span>navigator.onLine<span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">）、Firefox3、Safari4、Opera10.6、Chrome、 iOS3.2版Safari、Android版</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">WebKit</span></span></div>
+<div><span style="font-size: 12px;">     示例：</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#000080;font-weight:bold;">var </span><span style="color:#660e7a;font-weight:bold;font-style:italic;">line </span>= <span style="color:#660e7a;font-weight:bold;font-style:italic;">navigator</span>.<span style="color:#660e7a;font-weight:bold;">onLine</span>;</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#660e7a;font-weight:bold;font-style:italic;">line</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#660e7a;font-weight:bold;">window</span>.<span style="color:#7a7a43;">addEventListener</span>(<span style="color:#008000;font-weight:bold;">"online"</span>,<span style="color:#000080;font-weight:bold;">function</span>(){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#008000;font-weight:bold;">'online'</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">},<span style="color:#000080;font-weight:bold;">true</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#660e7a;font-weight:bold;">window</span>.<span style="color:#7a7a43;">addEventListener</span>(<span style="color:#008000;font-weight:bold;">"offline"</span>,<span style="color:#000080;font-weight:bold;">function</span>(){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#008000;font-weight:bold;">'offline'</span>);</span></span></div>
+<div style="background-color: rgb(255, 255, 255); margin-left: 40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">},<span style="color:#000080;font-weight:bold;">true</span>);</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">2、应用缓存（<span style="font-family: TimesNewRoman;">appcache</span>）</span></div>
+<div><span style="font-size: 12px;">     专门为开发离线web应用而设计的。在浏览器缓存中分出来一块缓存。</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">   &lt;html manifest="/offline.manifest"&gt;</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">   HTML属性manifest</span>定义一个 文件路径，<span style="font-family: Courier;">offline.manifest</span><span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">这个文件包含了浏览器需要为你的应用缓存的资源(文件)列表。</span></span></div>
+<div><span style="font-size: 12px;">      ps:缓存文件扩展名现在是<span style="font-family: TimesNewRoman;">appcache后缀</span></span></div>
+<div>
+<div style="color: rgb(85, 85, 85); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="font-size: 12px;">您需要注意以下几点：</span></div>
+</div>
+</div>
+<div><span style="font-size: 12px;"><span style="color: rgb(85, 85, 85);"><code style="font-family: 'Source Code Pro', monospace;">CACHE MANIFEST</code> 字符串应在第一行，且必不可少。</span></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(85, 85, 85);">如果清单文件或其中指定的资源无法下载，就无法进行整个缓存更新进程。在这种情况下，浏览器将继续使用原应用缓存。</span></span></div>
+<div><span style="font-size: 12px;"><span style="color: rgb(85, 85, 85);"><br/></span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">   （1）通过检测</span><span style="font-family: Courier;">applicationCache对象：</span></span></div>
+<div><span style="font-size: 12px;">           ps:事件触发的顺序是按照下面的的顺序触发。</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">    &gt;应用缓存相关的事件：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         checking    </span>第一次下载manifest清单时，它往往是第一个被触发的事件</span></div>
+<div><span style="font-size: 12px;">                   error            在检查更新和下载资源期间发生的错误触发。  </span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         noupdate     </span>当检查到Manifest中清单文件不需要更新时，触发该事件</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         downloading  </span>第一次下载或更新manifest清单文件时 <span style="font-family: Courier;">  </span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         progress  </span>该事件与downloading类似，但downloading事件只触发一次。Progress事件则在清单文件下载过程中周期性触发 <span style="font-family: Courier;">  </span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         updateready      </span>此事件的含义表示缓存清单文件已经下载完毕，可通过重新加载页面读取缓存文件或者通过方法swapCache切换到新的缓存文件。常用语本地缓存跟新版本后的提示 <span style="font-family: Courier;">  </span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         cached     </span>当manifest清单文件下载完毕及成功缓存后</span></div>
+<div>
+<div style="min-height: 0px; box-sizing: border-box; list-style-type: none; padding-left: 12px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;">
+<div><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;">       </span></span>  Obsolete<b>         </b>加入访问manifest缓存文件返回HTTP404错误（页面未找到）或者410错误（永久消失）时，触发该事件</span></div>
+<div><span style="font-size: 12px;"> </span></div>
+<div><span style="font-size: 12px;">              </span></div>
+</div>
+</div>
+</div>
+<div>
+<div style="min-height: 0px; box-sizing: border-box; list-style-type: none; padding-left: 12px; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;">
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">CHECKING</span><span style="min-width: 0px; min-height: 0px; box-sizing: border-box; flex-shrink: 0; padding-right: 5px;">:</span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">2   applicationCache.</span></span></span><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">CHECKING</span></span></span></span></div>
+</div>
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;margin-left:40px;">
+<div><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">DOWNLOADING</span><span style="min-width: 0px; min-height: 0px; box-sizing: border-box; flex-shrink: 0; padding-right: 5px;">:</span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">3     </span></span></span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">applicationCache.</span><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">DOWNLOADING</span></span></span></span></div>
+</div>
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;margin-left:40px;">
+<div><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">IDLE</span><span style="min-width: 0px; min-height: 0px; box-sizing: border-box; flex-shrink: 0; padding-right: 5px;">:</span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">1     </span></span></span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">applicationCache.</span><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">IDLE</span></span></span></span></div>
+</div>
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;margin-left:40px;">
+<div><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">OBSOLETE</span><span style="min-width: 0px; min-height: 0px; box-sizing: border-box; flex-shrink: 0; padding-right: 5px;">:</span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">5     </span></span></span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">applicationCache.</span><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">OBSOLETE</span></span></span></span></div>
+</div>
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;margin-left:40px;">
+<div><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">UNCACHED</span><span style="min-width: 0px; min-height: 0px; box-sizing: border-box; flex-shrink: 0; padding-right: 5px;">:</span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">0     </span></span></span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">applicationCache.</span><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">UNCACHED</span></span></span></span></div>
+</div>
+<div style="min-height: 16px; box-sizing: border-box; text-overflow: ellipsis; align-items: center; -webkit-user-select: text;">
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">UPDATEREADY</span><span style="min-width: 0px; min-height: 0px; box-sizing: border-box; flex-shrink: 0; padding-right: 5px;">:</span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">4     </span></span></span><span style="min-height: 0px; box-sizing: border-box; color: rgb(28, 0, 207);">applicationCache.</span><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="min-height: 0px; box-sizing: border-box; color: rgb(136, 19, 145); flex-shrink: 0;">UPDATEREADY</span></span></span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(33, 33, 33);"><span style="font-family: Menlo, monospace;"><span style="color: rgb(28, 0, 207);"><br/></span></span></span></span></div>
+</div>
+</div>
+</div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">     &gt;</span><span style="font-family: Courier;">applicationCache.status:</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          0     无缓存，没有与页面相关的缓存</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          1     闲置，应用缓存未得到更新  </span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          2    </span> <span style="font-family: Courier;">检查中，即正在下载描述文件并检查更新</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          3     </span><span style="font-family: Courier;">下载中，正在下载</span>manifest中描述的文件</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          4     </span><span style="font-family: Courier;">更新完成，即更新的缓存已经更新完了缓存，所有资源已经下载完了，可以使用通过</span><span style="font-family: Courier;">swapCache()来启用新的缓存文件。</span><span style="font-family: Courier;">applicationCache.</span><span style="font-family: Courier;">swapCache();</span></span></div>
+<div><span style="font-size: 12px;">                      <span style="font-family: Courier;">5     </span><span style="font-family: Courier;">废弃，表示查找的文件不存在。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">（2）通过调用</span><span style="font-family: Courier;">applicationCache.swapCache()方法来启动应用的新缓存。</span></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">3、数据存储</span></div>
+<div><span style="font-size: 12px;">（1）cookie</span></div>
+<div><span style="font-size: 12px;">子cookie</span></div>
+<div><span style="font-size: 12px;">（2）web存储机制：</span></div>
+<div><span style="font-size: 12px;">        storage类型：</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">          clear()     删除所有值</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">          key(index)     获取index位置值的名字</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;">          <span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">getItem(name)     获取指定name的值</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">     setItem(</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">name</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">)     为</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">指定name的设置值</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">     removeItem(</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">name</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">)     删除</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">指定name的名值对</span></span></div>
+<div><span style="font-size: 12px;">        ( a ) sessionStorage对象(浏览器关闭或标签关闭时消失)</span></div>
+<div><span style="font-size: 12px;">          sessionStorage是storage的实例</span></div>
+<div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">获取属性的方法：</span></span></span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">      示例：<br/></span></span></span></span></div>
+<div style="margin-left:40px;">
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">var book = sessionStorage.book  //获取对象的属性</span></span></div>
+</div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">var name = sessionStorage.getItem("name”) </span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">//访问对象的方法</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">删除属性的方法：</span></span></span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">      </span></span></span><span style="font-family: Menlo, monospace;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(48, 57, 66);">示例：</span></span></span></span></div>
+<div style="margin-left:40px;">
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">delete sessionStorage.book  //使用</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">delete操作符   </span></span></div>
+</div>
+</div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">var name = sessionStorage.</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">removeItem</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">("name”) </span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">//</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">removeItem</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">方法</span></span></div>
+<div><span style="font-size: 12px;">        ( b ) globalStorage对象（除非使用<span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">removeItem和</span><span style="color: rgb(48, 57, 66); font-family: Menlo, monospace; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">delete删除以及浏览器缓存清理，不然数据会一直保存下去</span>）</span></div>
+<div><span style="font-size: 12px;">          globalStorage不是storage的实例，但是，globalStorage的每个属性都是storage的实例。</span></div>
+<div><span style="font-size: 12px;">          限制：是根据发送请求页面的与，域名、协议端口号限制的。</span></div>
+<div><span style="font-size: 12px;">               示例：</span></div>
+<div><span style="font-size: 12px;">               globalStorage[‘www.meituan.com'].name = meituan;</span></div>
+<div><span style="font-size: 12px;">               ps: 访问页面时使用https，端口号为80，如果使用相同域名www.meituan.com访问，协议为http，端口为8080则不会访问到数据。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">        ( c ) localStorage对象</span></div>
+<div><span style="font-size: 12px;">               localStorage是storage的实例</span></div>
+<div><span style="font-size: 12px;">               作用：持久会话存储数据</span></div>
+<div><span style="font-size: 12px;">               限制：页面必须在来自同一个域名下（子域名不可以）、同一协议、同一端口下。</span></div>
+<div><span style="font-size: 12px;">         (d) <span style="font-family: Courier;">Storage事件：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         事件触发，当</span><span style="font-family: Courier;">Storage对象发生变化的时候回触发、比如调用storage的属性和方法操作对象。</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">         event对象属性：</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">domain</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">key</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">newValue</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">oldValue</span></span></div>
+<div><span style="font-size: 12px;">               </span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">（3）indexDB(indexed database API)数据库</span></div>
+<div><span style="font-size: 12px;">          特点：使用对象保存数据.</span></div>
+<div><span style="font-size: 12px;">          创建步骤：</span></div>
+<div><span style="font-size: 12px;">               a、打开数据库（可以指定版本）。</span></div>
+<div><span style="font-size: 12px;">                    示例：</span></div>
+<div><span style="font-size: 12px;">                    <code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: Consolas, Monaco, &quot;Andale Mono&quot;, &quot;Ubuntu Mono&quot;, monospace; direction: ltr; text-align: left; word-spacing: normal; tab-size: 4; color: rgb(77, 78, 83); text-shadow: none;"><span style="padding: 0px; border: 0px; color: rgb(0, 119, 170);">var</span> request <span style="padding: 0px; border: 0px; color: rgb(166, 127, 89); background: rgba(255, 255, 255, 0.498039);">=</span> window<span style="padding: 0px; border: 0px; color: rgb(153, 153, 153);">.</span>indexedDB<span style="padding: 0px; border: 0px; color: rgb(153, 153, 153);">.</span><span style="padding: 0px; border: 0px; color: rgb(221, 74, 104);">open</span><span style="padding: 0px; border: 0px; color: rgb(153, 153, 153);">(</span><span style="padding: 0px; border: 0px; color: rgb(102, 153, 0);">“MyTestDatabase"，version</span><span style="padding: 0px; border: 0px; color: rgb(153, 153, 153);">)</span><span style="padding: 0px; border: 0px; color: rgb(153, 153, 153);">;//</span></code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: Consolas, Monaco, &quot;Andale Mono&quot;, &quot;Ubuntu Mono&quot;, monospace; direction: ltr; text-align: left; word-spacing: normal; tab-size: 4; color: rgb(77, 78, 83); text-shadow: none;"><span style="padding: 0px; border: 0px; color: rgb(102, 153, 0);">version</span></code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: inherit; font-family: Consolas, Monaco, &quot;Andale Mono&quot;, &quot;Ubuntu Mono&quot;, monospace; direction: ltr; text-align: left; word-spacing: normal; tab-size: 4; color: rgb(77, 78, 83); text-shadow: none;"><span style="padding: 0px; border: 0px; color: rgb(153, 153, 153);">打开指定版本号数据库</span></code></span></div>
+<div><span style="font-size: 12px;">               b、创建一个对象存储空间（object story）（<code style="padding: 0px; border: 0px; font-style: normal; font-weight: normal; font-family: Consolas, 'Liberation Mono', Courier, monospace; word-wrap: break-word; color: rgb(77, 78, 83); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">onupgradeneeded</code><span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;"> 是我们唯一可以修改数据库结构的地方</span>）。</span></div>
+<div><span style="font-size: 12px;">                    var objectStore = db.createObjectStore("name4", { keyPath: "myKey4" });</span></div>
+<div><span style="font-size: 12px;">               c、构建一个事务<span style="font-family: Courier;">transaction()，</span>像读取修改数据等。</span></div>
+<div><span style="font-size: 12px;">                    <span style="font-family: Courier;">transaction([</span><span style="font-family: Courier;">para1,</span><span style="font-family: Courier;">para11</span><span style="font-family: Courier;">],para2);参数一传入</span><span style="color: rgb(77, 78, 83); font-family: 'Open Sans', Arial, sans-serif; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">对象存储空间的列表</span><span style="font-family: Courier;">，可以传入多个；</span><span style="font-family: Courier;">参数二表示对存储空间的访问模式，IDBTransaction.</span><span style="font-family: Courier;">READ_ONLY</span><span style="font-family: Courier;">（READ_ONLY:0只读,READ_WRITE:1读写,VERSION_CHANGE:2改变)。取的空间索引之后使用</span><span style="font-family: Courier;">objectStore()方法传送存储空间的名称。</span></span></div>
+<div><span style="font-size: 12px;">                    var <span style="font-family: Courier;">transaction = </span>db.transaction();</span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          var store = db.transaction("users").objectStore("users"),</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">        </span>d、<span style="font-family: Courier;">使用游标查询：</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          var request = </span><span style="font-family: Courier;">store.openCursor();</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          </span><span style="font-family: Courier;">request.onsuccess = function(e){</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">               // 成功</span><span style="font-family: Courier;">event.target.result</span></span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          }</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">    request.onerror = function(e){</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">   // 失败var result = </span><span style="font-family: Courier;">event.target.result</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">   //</span> <span style="font-family: Courier;">result中有一个</span><span style="font-family: Courier;">IDBCursor实例</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Courier;">   //</span><span style="font-family: Courier;">direction游标方向：</span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     IDBCursor.NEXT<span style="font-family: FZSSJW--GB1-0;">（0）下一项</span></span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     IDBCursor.NEXT_NO_DUPLICATE（1）</span><span style="font-family: Courier;"><span style="font-family: FZSSJW--GB1-0;">下一个不重复的项</span></span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     IDBCursor.PREV<span style="font-family: FZSSJW--GB1-0;">（2）前</span></span><span style="font-family: Courier;"><span style="font-family: FZSSJW--GB1-0;">一项</span></span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     IDBCursor.PREV_NO_DUPLICATE() </span><span style="font-family: Courier;"><span style="font-family: FZSSJW--GB1-0;">前</span></span><span style="font-family: Courier;"><span style="font-family: FZSSJW--GB1-0;">一个</span></span><span style="font-family: Courier;"><span style="font-family: FZSSJW--GB1-0;">不重复的项</span></span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">key对象的键值</span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">value实际对象</span></span></div>
+<div style="margin-left:120px;"><span style="font-size: 12px;"><span style="font-family: Courier;">primaryKey游标使用的</span>    </span></div>
+<div><span style="font-size: 12px;"><span style="font-family: Courier;">          }</span></span></div>
+<div>
+<div style="font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: 'microsoft yahei';">默认情况下，每个游标只发起一次请求。要想发起另一次请求，必须调用下面的方法：</span> <span style="font-family: 'microsoft yahei';">continue(key):移动到结果集的下一项，参数key可选，不指定参数，游标移动到下一项，指定参数游标会移动到指定键的位置。</span></span></div>
+</div>
+</div>
+<div style="margin-left:80px;">
+<div style="color: rgb(0, 0, 0); font-family: 'microsoft yahei'; font-style: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="font-size: 12px;">advance(count):向前移动count指定的项数。</span></div>
+</div>
+</div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">               e、在操作结果上进行一些操作（可以在 request 对象中找到）。</span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">          示例新建数据库：</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#000080;font-weight:bold;">var </span><span style="color:#660e7a;font-weight:bold;font-style:italic;">indexedDB </span>= <span style="color:#660e7a;font-weight:bold;">window</span>.indexedDB || <span style="color:#660e7a;font-weight:bold;">window</span>.msIndexedDB || <span style="color:#660e7a;font-weight:bold;">window</span>.mozIndexedDB || <span style="color:#660e7a;font-weight:bold;">window</span>.webkitIndexedDB;</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#000080;font-weight:bold;">var </span><span style="color:#660e7a;font-weight:bold;font-style:italic;">request</span>, <span style="color:#660e7a;font-weight:bold;font-style:italic;">database</span>;</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo; color: rgb(102, 14, 122); font-weight: bold; font-style: italic;">request </span><font face="Menlo">= </font><span style="font-family: Menlo; color: rgb(102, 14, 122); font-weight: bold; font-style: italic;">indexedDB</span><font face="Menlo">.</font><span style="font-family: Menlo; color: rgb(122, 122, 67);">open</span><font face="Menlo">(</font><span style="font-family: Menlo; color: rgb(0, 128, 0); font-weight: bold;">"huo</span><font color="#008000" face="Menlo"><b>”</b></font><font face="Menlo">);  </font></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><font face="Menlo">//open(dataName)</font></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><font face="Menlo">//如果有数据库名存在就发送打开数据库请求，如果数据库名不存在就发送新建数据库请求，返回</font><span style="font-family: Courier;">IDBRequest对象</span><font face="Menlo">。</font></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#660e7a;font-weight:bold;font-style:italic;">request</span>.<span style="color:#7a7a43;">onerror </span>= <span style="color:#000080;font-weight:bold;">function</span>(event){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#7a7a43;">alert</span>(<span style="color:#008000;font-weight:bold;">"Something bad happened while trying to open: " </span>+</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    event.<span style="color:#660e7a;font-weight:bold;">target</span>.<span style="color:#660e7a;font-weight:bold;">errorCode</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">};</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#660e7a;font-weight:bold;font-style:italic;">request</span>.<span style="color:#7a7a43;">onsuccess </span>= <span style="color:#000080;font-weight:bold;">function</span>(event){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;font-style:italic;">database </span>= event.<span style="color:#660e7a;font-weight:bold;">target</span>.<span style="color:#7a7a43;">result</span>;</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#660e7a;font-weight:bold;font-style:italic;">database</span>);</span></span></div>
+<div style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Menlo; margin-left: 40px;"><span style="font-size: 12px;">};</span></div>
+<span style="font-size: 12px;"><br/></span>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">     </span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">setVersion()给数据库设置版本号。设置之前检测版本号是否存在(</span><span style="font-family: Courier;">database.version</span><span style="font-family: Courier;">)。</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">add()插入新值</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">put()更新原有值</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">add和put操作会发起请求，可以通过success和error事件处理请求返回值。</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">objectStore()传入存储空间的名称</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">事件：</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     onerror,</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     onsuccess,</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     oncomplete，</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">     on</span><code style="padding: 0px; border: 0px; font-style: normal; font-weight: normal; font-family: Consolas, 'Liberation Mono', Courier, monospace; word-wrap: break-word; color: rgb(77, 78, 83); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">upgradeneeded 当修改当前存储数据库的</code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: normal; font-family: Consolas, 'Liberation Mono', Courier, monospace; word-wrap: break-word; color: rgb(77, 78, 83); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">版本号时</code><code style="padding: 0px; border: 0px; font-style: normal; font-weight: normal; font-family: Consolas, 'Liberation Mono', Courier, monospace; word-wrap: break-word; color: rgb(77, 78, 83); letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">触发</code></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;"><br/></span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Courier;">参考API:</span><a href="https://www.w3.org/TR/IndexedDB/#events">https://www.w3.org/TR/IndexedDB/#events</a></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;"><br/></span></div>
+<div><span style="font-size: 12px;">第二十二章：高级技巧：</span></div>
+<div><span style="font-size: 12px;">一、高级技巧</span></div>
+<div><span style="font-size: 12px;">4、函数绑定bind()</span></div>
+<div><span style="font-size: 12px;">     代码：</span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#808080;font-style:italic;">// 事件兼容对象</span></span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#000080;font-weight:bold;">var </span><span style="color:#660e7a;font-weight:bold;font-style:italic;">EventUtil </span>= {</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#7a7a43;">addHandler</span>: <span style="color:#000080;font-weight:bold;">function</span>(element, type, handler){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        <span style="color:#000080;font-weight:bold;">if </span>(element.<span style="color:#7a7a43;">addEventListener</span>){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">            element.<span style="color:#7a7a43;">addEventListener</span>(type, handler, <span style="color:#000080;font-weight:bold;">false</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        } <span style="color:#000080;font-weight:bold;">else if </span>(element.<span style="color:#7a7a43;">attachEvent</span>){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">            element.<span style="color:#7a7a43;">attachEvent</span>(<span style="color:#008000;font-weight:bold;">"on" </span>+ type, handler);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        } <span style="color:#000080;font-weight:bold;">else </span>{</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">            element[<span style="color:#008000;font-weight:bold;">"on" </span>+ type] = handler;</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        }</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    },</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#7a7a43;">removeHandler</span>: <span style="color:#000080;font-weight:bold;">function</span>(element, type, handler){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        <span style="color:#000080;font-weight:bold;">if </span>(element.<span style="color:#7a7a43;">removeEventListener</span>){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">            element.<span style="color:#7a7a43;">removeEventListener</span>(type, handler, <span style="color:#000080;font-weight:bold;">false</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        } <span style="color:#000080;font-weight:bold;">else if </span>(element.<span style="color:#7a7a43;">detachEvent</span>){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">            element.<span style="color:#7a7a43;">detachEvent</span>(<span style="color:#008000;font-weight:bold;">"on" </span>+ type, handler);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        } <span style="color:#000080;font-weight:bold;">else </span>{</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">            element[<span style="color:#008000;font-weight:bold;">"on" </span>+ type] = <span style="color:#000080;font-weight:bold;">null</span>;</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        } }</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">};</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#000080;font-weight:bold;">var </span><span style="color:#660e7a;font-weight:bold;font-style:italic;">bindButton </span>= <span style="color:#660e7a;font-weight:bold;font-style:italic;">document</span>.<span style="color:#7a7a43;">getElementsByClassName</span>(<span style="color:#008000;font-weight:bold;">"bindButton"</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#000080;font-weight:bold;">var </span><span style="color:#660e7a;font-weight:bold;font-style:italic;">handler </span>= {</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;">message</span>: <span style="color:#008000;font-weight:bold;">"event handle"</span>,</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#7a7a43;">handleClick</span>: <span style="color:#000080;font-weight:bold;">function</span>(e){</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#000080;font-weight:bold;">this</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">        <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#000080;font-weight:bold;">this</span>.<span style="color:#660e7a;font-weight:bold;">message</span>);</span></span></div>
+<div style="margin-left:40px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    }</span></span></div>
+<div style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Menlo; margin-left: 40px;"><span style="font-size: 12px;">}</span></div>
+<div style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Menlo; margin-left: 40px;"><span style="font-size: 12px;">（1）自定义一个bind（）封闭函数，让this不要只想window作用域</span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Menlo;"><span style="color:#660e7a;font-weight:bold;font-style:italic;">EventUtil</span>.<span style="color:#7a7a43;">addHandler</span>(<span style="color:#660e7a;font-weight:bold;font-style:italic;">bindButton</span>[<span style="color:#0000ff;">0</span>], <span style="color:#008000;font-weight:bold;">"click"</span>, <span style="color:#000080;font-weight:bold;">function</span>(e){</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(<span style="color:#000080;font-weight:bold;">this</span>);</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;">console</span>.<span style="color:#7a7a43;">log</span>(e);</span></span></div>
+<div style="margin-left:80px;"><span style="font-size: 12px;"><span style="font-family: Menlo;">    <span style="color:#660e7a;font-weight:bold;font-style:italic;">handler</span>.<span style="color:#7a7a43;">handleClick</span>();</span></span></div>
+<div style="background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Menlo; margin-left: 80px;"><span style="font-size: 12px;">});</span></div>
+<div style="background-color: rgb(255, 255, 255); margin-left: 40px;"><span style="font-size: 12px;">（2）使用原生的bind()方法：</span></div>
+<div style="background-color: rgb(255, 255, 255); margin-left: 40px;"><span style="font-size: 12px;">          </span><strong style=" padding: 0px; border: 0px; color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);"><span style="padding: 0px; border: 0px; font-family: &quot;courier new&quot;, &quot;andale mono&quot;, monospace;">bind()</span></strong><span style="color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">方法会创建一个新函数，</span><span style="color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">新函数与被调函数（绑定函数的目标函数）具有相同的函数体。</span><span style="color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">当这个新函数被调用时，新函数</span><span style="color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">的this值是传递给bind()的第一个参数,</span> <span style="color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">新函数</span><span style="color: rgb(77, 78, 83); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); float: none;">的参数是bind()方法的其他参数和新函数原本的参数.</span></div>
+<div style="background-color: rgb(255, 255, 255); margin-left: 40px;"><span style="font-family: 'Open Sans', Arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(77, 78, 83);">         语法：</span></span></span></div>
+<div style="background-color: rgb(255, 255, 255); margin-left: 40px;"><span style="font-family: 'Open Sans', Arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(77, 78, 83);">               fun.bind(thisArg[, arg1[, arg2[, ...]]])</span></span></span></div>
+<div style="background-color: rgb(255, 255, 255); margin-left: 40px;"><span style="font-family: 'Open Sans', Arial, sans-serif;"><span style="background-color: rgb(255, 255, 255);"><span style="color: rgb(77, 78, 83);">               参数：</span></span></span></div>
+<div style="margin-left:40px;">
+<div style="padding: 0px; border: 0px; font-style: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+<div><span style="color: rgb(77, 78, 83);"><code style=" padding: 0px; border: 0px; font-style: inherit; font-weight: inherit; font-family: Consolas, &quot;Liberation Mono&quot;, Courier, monospace; word-wrap: break-word;"><b>       thisArg </b></code> <span style="font-family: 'Open Sans', Arial, sans-serif;">当绑定函数被调用时，该参数会作为原函数运行时的 </span><span style=" padding: 0px; border: 0px; font-family: &quot;courier new&quot;, &quot;andale mono&quot;, monospace;">this指定对象。</span></span></div>
+<div><span style="color: rgb(77, 78, 83);"><span style="font-family: 'courier new', 'andale mono', monospace;">       </span><code style=" padding: 0px; border: 0px; font-style: inherit; font-weight: inherit; font-family: Consolas, &quot;Liberation Mono&quot;, Courier, monospace; word-wrap: break-word;"><b>arg1, arg2, ... </b></code> <span style="font-family: 'Open Sans', Arial, sans-serif;">当绑定函数被调用时，这些参数加上绑定函数本身的参数会按照顺序作为原函数运行时的参数。</span></span></div>
+</div>
+</div>
+<div style="background-color:#ffffff;color:#000000;font-family:'Menlo';font-size:12.0pt;margin-left:40px;"><span style="font-size: 12px;"><span style="color:#660e7a;font-weight:bold;font-style:italic;">     EventUtil</span>.<span style="color:#7a7a43;">addHandler</span>(<span style="color:#660e7a;font-weight:bold;font-style:italic;">bindButton</span>[<span style="color:#0000ff;">0</span>], <span style="color:#008000;font-weight:bold;">"click"</span>,<span style="color:#660e7a;font-weight:bold;font-style:italic;">handler</span>.<span style="color:#7a7a43;">handleClick</span>.<span style="color:#7a7a43;">bind</span>(<span style="color:#660e7a;font-weight:bold;font-style:italic;">handler</span>));</span></div>
+</body></html>
